@@ -111,9 +111,7 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
                   },
                   child: Text("Log In"),
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(16),
-                    primary: Colors.yellow,
-                    onPrimary: Colors.black,
+                    foregroundColor: Colors.black, backgroundColor: Colors.yellow, padding: EdgeInsets.all(16),
                     textStyle: TextStyle(fontSize: 18),
                   ),
                 ),
