@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import '../Authentication/login.dart';
-
+import '../Authentication/signup.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +23,7 @@ void main() async{
       // initialRoute: FirebaseAuth.instance.currentUser != null ? '/friends' : '/login',
       routes: {
         '/': (context) => Login(),
+        '/signup': (context) => SignUp(),
       }));
 }
 

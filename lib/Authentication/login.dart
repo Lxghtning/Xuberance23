@@ -50,8 +50,8 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 250, 0, 0),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(0, 250, 0, 0),
                   child: Text(
                     "Log In",
                     style: TextStyle(
@@ -62,12 +62,12 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(height: 48),
+                const SizedBox(height: 48),
                 TextField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  style: TextStyle(color: Colors.yellow),
-                  decoration: InputDecoration(
+                  style: const TextStyle(color: Colors.yellow),
+                  decoration: const InputDecoration(
                     labelText: "Email",
                     labelStyle: TextStyle(color: Colors.yellow),
                     border: OutlineInputBorder(),
@@ -77,12 +77,12 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
                     prefixIcon: Icon(Icons.email, color: Colors.yellow),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextField(
                   controller: _passwordController,
                   obscureText: true,
-                  style: TextStyle(color: Colors.yellow),
-                  decoration: InputDecoration(
+                  style: const TextStyle(color: Colors.yellow),
+                  decoration: const InputDecoration(
                     labelText: "Password",
                     labelStyle: TextStyle(color: Colors.yellow),
                     border: OutlineInputBorder(),
@@ -95,7 +95,7 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    child: Text(
+                    child: const Text(
                       "Forgot Password?",
                       style: TextStyle(color: Colors.yellow),
                     ),
@@ -104,32 +104,38 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
                     },
                   ),
                 ),
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
                 ElevatedButton(
                   onPressed: () {
                     // Add login logic here
                   },
-                  child: Text("Log In"),
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.black, backgroundColor: Colors.yellow, padding: EdgeInsets.all(16),
-                    textStyle: TextStyle(fontSize: 18),
+                    foregroundColor: Colors.black, backgroundColor: Colors.yellow, padding: const EdgeInsets.all(16),
+                    textStyle: const TextStyle(fontSize: 18),
                   ),
+                  child: const Text("Log In"),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    TextButton(
+                      onPressed: (){
+                        Navigator.pushReplacementNamed(context, "/signup");
+                      },
+                      child: const Text(
                       "Don't have an account? ",
                       style: TextStyle(color: Colors.yellow),
+                      ),
                     ),
                     TextButton(
-                      child: Text(
+                      child: const Text(
                         "Register",
                         style: TextStyle(color: Colors.yellow),
                       ),
                       onPressed: () {
-                        // Navigate to registration screen or handle registration logic
+                        Navigator.pushReplacementNamed(context, "/signup");
+
                       },
                     ),
                   ],
@@ -148,16 +154,16 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Forgot Password"),
+          title: const Text("Forgot Password"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("Enter your email to reset password."),
-              SizedBox(height: 16),
+              const Text("Enter your email to reset password."),
+              const SizedBox(height: 16),
               TextField(
                 controller: _resetEmailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Email",
                   prefixIcon: Icon(Icons.email),
                 ),
@@ -166,13 +172,13 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
           ),
           actions: [
             TextButton(
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text("Submit"),
+              child: const Text("Submit"),
               onPressed: () {
                 // Handle the password reset logic
                 Navigator.of(context).pop();
