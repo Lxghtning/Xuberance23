@@ -95,8 +95,22 @@ class _LoginState extends State<Login>{
                 ),
             Row(
               children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(30, 0, 50, 0),
+                  child: InkWell(
+                    child: const Text(
+                      'Register',
+                      style: TextStyle(
+                        color: Colors.blueAccent,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pushReplacementNamed(context, '/register');
+                    },
+                  ),
+                ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 200, 10),
+                        padding: const EdgeInsets.fromLTRB(120, 10, 0, 10),
                         child: InkWell(
                         child: const Text(
                           'Forgot Password?',
@@ -147,17 +161,7 @@ class _LoginState extends State<Login>{
                         },
                     ),
                       ),
-                      InkWell(
-                        child: const Text(
-                          'Do not have an account? Register',
-                          style: TextStyle(
-                            color: Colors.blueAccent,
-                          ),
-                        ),
-                        onTap: () {
-                          Navigator.pushReplacementNamed(context, '/register');
-                        },
-                      ),
+
                     ],
                   ),
 
