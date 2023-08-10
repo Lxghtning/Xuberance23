@@ -4,9 +4,11 @@ import 'package:email_validator/email_validator.dart';
 import '../Firebase/auth.dart';
 import '../Firebase/database.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,7 +17,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         scaffoldBackgroundColor: Colors.black,
       ),
-      home: SignUp(),
+      home: const SignUp(),
     );
   }
 }
@@ -28,10 +30,10 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUp> with SingleTickerProviderStateMixin{
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +46,8 @@ class _SignUpPageState extends State<SignUp> with SingleTickerProviderStateMixin
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 250, 0, 0),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(0, 250, 0, 0),
                 child: Text(
                   "Sign Up",
                   style: TextStyle(
@@ -56,11 +58,11 @@ class _SignUpPageState extends State<SignUp> with SingleTickerProviderStateMixin
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(height: 48),
+              const SizedBox(height: 48),
               TextField(
                 controller: _nameController,
-                style: TextStyle(color: Colors.yellow),
-                decoration: InputDecoration(
+                style: const TextStyle(color: Colors.yellow),
+                decoration: const InputDecoration(
                   labelText: "Name",
                   labelStyle: TextStyle(color: Colors.yellow),
                   border: OutlineInputBorder(),
@@ -70,11 +72,11 @@ class _SignUpPageState extends State<SignUp> with SingleTickerProviderStateMixin
                   prefixIcon: Icon(Icons.person, color: Colors.yellow),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextField(
                 controller: _usernameController,
-                style: TextStyle(color: Colors.yellow),
-                decoration: InputDecoration(
+                style: const TextStyle(color: Colors.yellow),
+                decoration: const InputDecoration(
                   labelText: "Username",
                   labelStyle: TextStyle(color: Colors.yellow),
                   border: OutlineInputBorder(),
@@ -84,12 +86,12 @@ class _SignUpPageState extends State<SignUp> with SingleTickerProviderStateMixin
                   prefixIcon: Icon(Icons.person_outline, color: Colors.yellow),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
-                style: TextStyle(color: Colors.yellow),
-                decoration: InputDecoration(
+                style: const TextStyle(color: Colors.yellow),
+                decoration: const InputDecoration(
                   labelText: "Email",
                   labelStyle: TextStyle(color: Colors.yellow),
                   border: OutlineInputBorder(),
@@ -99,12 +101,12 @@ class _SignUpPageState extends State<SignUp> with SingleTickerProviderStateMixin
                   prefixIcon: Icon(Icons.email, color: Colors.yellow),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextField(
                 controller: _passwordController,
                 obscureText: true,
-                style: TextStyle(color: Colors.yellow),
-                decoration: InputDecoration(
+                style: const TextStyle(color: Colors.yellow),
+                decoration: const InputDecoration(
                   labelText: "Password",
                   labelStyle: TextStyle(color: Colors.yellow),
                   border: OutlineInputBorder(),
@@ -114,18 +116,18 @@ class _SignUpPageState extends State<SignUp> with SingleTickerProviderStateMixin
                   prefixIcon: Icon(Icons.lock, color: Colors.yellow),
                 ),
               ),
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: () {
                   // Add signup logic here
                 },
-                child: Text("Sign Up"),
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   primary: Colors.yellow,
                   onPrimary: Colors.black,
-                  textStyle: TextStyle(fontSize: 18),
+                  textStyle: const TextStyle(fontSize: 18),
                 ),
+                child: const Text("Sign Up"),
               ),
             ],
           ),
