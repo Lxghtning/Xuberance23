@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "845522452566",
+    "project_id": "hackathonxuberance",
+    "storage_bucket": "hackathonxuberance.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:845522452566:android:f2db6a213872c292c7bbf7",
+        "android_client_info": {
+          "package_name": "com.company.hackathonxuberance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "845522452566-g8r156758h1aicu5rlehif526up6sf4c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzTrTGZaemK54OFiDiuAznINzdtbXOp2Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "845522452566-g8r156758h1aicu5rlehif526up6sf4c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
