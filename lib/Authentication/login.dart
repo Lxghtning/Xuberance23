@@ -1,206 +1,194 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:email_validator/email_validator.dart';
-import '../Firebase/auth.dart';
-import '../Firebase/database.dart';
 
-class Login extends StatefulWidget{
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
   @override
-  State<Login> createState() => _LoginState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.yellow,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: Login(),
+    );
+  }
 }
 
-class _LoginState extends State<Login>{
+class Login extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
 
-  final AuthService _auth = AuthService();
+class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  AnimationController? _animationController;
+  Animation<double>? _fadeAnimation;
 
-  String email = '';
-  String password = '';
-  String error = '';
-  String resetEmail = '';
-
-  bool passState = true;
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: Duration(seconds: 2),
+      vsync: this,
+    );
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_animationController!);
+    _animationController!.forward();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: SizedBox(
-              child: Column(
-                children: [
-                  const Padding(
-                      padding: EdgeInsets.only(right: 10, top: 150,),
+      backgroundColor: Colors.black,
+      body: SingleChildScrollView(
+        child: FadeTransition(
+          opacity: _fadeAnimation!,
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 250, 0, 0),
+                  child: Text(
+                    "Log In",
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.yellow,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(height: 48),
+                TextField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  style: TextStyle(color: Colors.yellow),
+                  decoration: InputDecoration(
+                    labelText: "Email",
+                    labelStyle: TextStyle(color: Colors.yellow),
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.yellow),
+                    ),
+                    prefixIcon: Icon(Icons.email, color: Colors.yellow),
+                  ),
+                ),
+                SizedBox(height: 16),
+                TextField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  style: TextStyle(color: Colors.yellow),
+                  decoration: InputDecoration(
+                    labelText: "Password",
+                    labelStyle: TextStyle(color: Colors.yellow),
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.yellow),
+                    ),
+                    prefixIcon: Icon(Icons.lock, color: Colors.yellow),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    child: Text(
+                      "Forgot Password?",
+                      style: TextStyle(color: Colors.yellow),
+                    ),
+                    onPressed: () {
+                      _showForgotPasswordDialog(context);
+                    },
+                  ),
+                ),
+                SizedBox(height: 32),
+                ElevatedButton(
+                  onPressed: () {
+                    // Add login logic here
+                  },
+                  child: Text("Log In"),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.all(16),
+                    primary: Colors.yellow,
+                    onPrimary: Colors.black,
+                    textStyle: TextStyle(fontSize: 18),
+                  ),
+                ),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Don't have an account? ",
+                      style: TextStyle(color: Colors.yellow),
+                    ),
+                    TextButton(
                       child: Text(
-                        'Welcome Back!',
-                        style: TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
+                        "Register",
+                        style: TextStyle(color: Colors.yellow),
                       ),
-                    ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(30, 100, 50, 0),
-                    child: TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: "Email",
-                          hintText: "Enter your email",
-                        ),
-                        onChanged: (value){
-                          bool isValid = EmailValidator.validate(value);
-                          if(isValid) {
-                            setState(() {
-                              error = "";
-                              email = value;
-                            });
-                          }else{
-                            setState(() {
-                              error = "Invalid Email!";
-                            });
-                          }
-
-                        }
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(30, 20, 50, 0),
-                    child: TextFormField(
-                      obscureText: passState,
-                      decoration: InputDecoration(
-                        labelText: "Password",
-                        hintText: "Enter your password",
-                        suffixIcon: IconButton(
-                          icon: passState ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
-                          onPressed: (){
-                            setState(() {
-                              passState = !passState;
-                            });
-                          },
-                        ),
-                      ),
-                      onChanged: (value){
-                        setState(() {
-                          password = value;
-                        });
+                      onPressed: () {
+                        // Navigate to registration screen or handle registration logic
                       },
                     ),
-                  ),
-                  Text(
-                      error,
-                      style: const TextStyle(
-                        color: Colors.red,
-                      )
-                  ),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(30, 0, 50, 0),
-                    child: InkWell(
-                      child: const Text(
-                        'Register',
-                        style: TextStyle(
-                          color: Colors.blueAccent,
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.pushReplacementNamed(context, '/register');
-                      },
-                    ),
-                  ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(120, 10, 0, 10),
-                          child: InkWell(
-                          child: const Text(
-                            'Forgot Password?',
-                            style: TextStyle(
-                              color: Colors.blueAccent,
-                            ),
-                          ),
-                          onTap: () {
-                            showDialog(context: context, builder: (BuildContext context){
-                              return AlertDialog(
-                                title: const Text("Enter your email"),
-                                content: TextField(
-                                  decoration: const InputDecoration(
-                                    labelText: "Email",
-                                    hintText: "Enter email",
-                                  ),
-                                  onChanged: (value){
-                                    setState(() {
-                                      resetEmail = value;
-                                    });
-                                  },
-                                ),
-                                actions: <Widget>[
-                                  ElevatedButton(
-                                    style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-                                    ),
-                                    child: const Text('Send',style:TextStyle(color: Colors.black)),
-                                    onPressed: () async{
-                                      await _auth.resetPassword(resetEmail);
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  ElevatedButton(
-                                    style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-                                    ),
-                                    child: const Text('Close', style: TextStyle(
-                                      color: Colors.black,
-                                    )),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              );
-                            });
-                          },
-                      ),
-                        ),
-
-                      ],
-                    ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(30, 20, 50, 0),
-                    child: SizedBox(
-                      width: 400,
-                      height: 65,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black, // Set the background color here
-                        ),
-                        onPressed: () async{
-                          try {
-                            await _auth
-                                .signInUserwithEmailAndPassword(email,
-                                password);
-
-                          }catch(e){
-                            if (e is FirebaseAuthException && e.code == 'user-not-found') {
-                              setState(() {
-                                error = "User not found! Try registering.";
-                              });
-                            }
-                          }
-                        },
-                        child: const Text(
-                            "Login",
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                            )
-                        ),
-
-                      ),
-                    ),
-                  ),
-                ],
-              )
+                  ],
+                ),
+              ],
             ),
           ),
-        )
+        ),
+      ),
     );
+  }
+
+  void _showForgotPasswordDialog(BuildContext context) {
+    TextEditingController _resetEmailController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Forgot Password"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("Enter your email to reset password."),
+              SizedBox(height: 16),
+              TextField(
+                controller: _resetEmailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  labelText: "Email",
+                  prefixIcon: Icon(Icons.email),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text("Submit"),
+              onPressed: () {
+                // Handle the password reset logic
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _animationController?.dispose();
   }
 }
