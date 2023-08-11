@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:hackathonxcodexuberance/Authentication/signup.dart';
+import 'package:hackathonxcodexuberance/screens/friends.dart';
 import '../Authentication/login.dart';
 
 
@@ -23,7 +24,7 @@ void main() async{
   runApp(MaterialApp(
       // initialRoute: FirebaseAuth.instance.currentUser != null ? '/friends' : '/login',
       routes: {
-        '/': (context) => Login(),
+        '/': (context) => Friends(),
         '/signup': (context) => SignUp(),
       }));
 }
