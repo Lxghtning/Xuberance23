@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hackathonxcodexuberance/Authentication/signup.dart';
 
 void main() => runApp(const MyApp());
 
@@ -27,8 +28,11 @@ class Login extends StatefulWidget {
 class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
   AnimationController? _animationController;
   Animation<double>? _fadeAnimation;
+
+  bool passState = true;
 
   @override
   void initState() {
@@ -84,16 +88,25 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
                 const SizedBox(height: 16),
                 TextField(
                   controller: _passwordController,
-                  obscureText: true,
+                  obscureText: passState? true: false,
                   style: const TextStyle(color: Colors.yellow),
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: "Password",
-                    labelStyle: TextStyle(color: Colors.yellow),
-                    border: OutlineInputBorder(),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.yellow),
+                    labelStyle: const TextStyle(color: Colors.yellow),
+                    border:const  OutlineInputBorder(),
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: const  BorderSide(color: Colors.yellow),
                     ),
                     prefixIcon: Icon(Icons.lock, color: Colors.yellow),
+                      suffixIcon: IconButton(
+                        color: Colors.yellow,
+                        icon: passState ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
+                        onPressed: (){
+                          setState(() {
+                            passState = !passState;
+                          });
+                        },
+                      )
                   ),
                 ),
                 Align(
@@ -125,10 +138,14 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
                   children: [
                     TextButton(
                       onPressed: (){
-                        Navigator.pushReplacementNamed(context, "/signup");
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => const SignUp()),
+                        );
                       },
                       child: const Text(
-                      "Don't have an account? ",
+                      "Don't have an account?",
                       style: TextStyle(color: Colors.yellow),
                       ),
                     ),
