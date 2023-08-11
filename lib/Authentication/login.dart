@@ -47,6 +47,17 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    int hours = DateTime.now().hour;
+
+    String greeting = "Hello!";
+
+    if (hours >= 6 && hours < 12) {
+      greeting = "Good Morning!";
+    } else if (hours >= 12 && hours < 18) {
+      greeting = "Good Afternoon!";
+    } else if (hours >= 18 && hours < 24) {
+      greeting = "Good Evening!";
+    }
     return Scaffold(
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
@@ -58,11 +69,11 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(0, 250, 0, 0),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 200, 0, 0),
                   child: Text(
-                    "Log In",
-                    style: TextStyle(
+                    greeting,
+                    style: const TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
                       color: Colors.yellow,
