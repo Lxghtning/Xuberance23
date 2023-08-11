@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:hackathonxcodexuberance/Authentication/login.dart';
@@ -41,6 +42,15 @@ class _SignUpPageState extends State<SignUp> with SingleTickerProviderStateMixin
 
   bool passState = true;
 
+  final AuthService _auth = AuthService();
+  final Database _firestoreDatabase = Database();
+
+  String error = "";
+  String email = "";
+  String username = "";
+  String password = "";
+  String mtoken = "";
+
   @override
   void initState() {
     super.initState();
@@ -51,7 +61,28 @@ class _SignUpPageState extends State<SignUp> with SingleTickerProviderStateMixin
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_animationController!);
     _animationController!.forward();
   }
+  void requestPermission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
 
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    }
+    else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+      print('User granted provisional permission');
+    }
+    else {
+      print('User declined or has not accepted permission');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,6 +112,11 @@ class _SignUpPageState extends State<SignUp> with SingleTickerProviderStateMixin
               TextField(
                 controller: _usernameController,
                 style: const TextStyle(color: Colors.yellow),
+                onChanged: (value){
+                  setState(() {
+                    username = value;
+                  });
+                },
                 decoration: const InputDecoration(
                   labelText: "Username",
                   labelStyle: TextStyle(color: Colors.yellow),
@@ -96,6 +132,23 @@ class _SignUpPageState extends State<SignUp> with SingleTickerProviderStateMixin
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 style: const TextStyle(color: Colors.yellow),
+                onChanged: (value){
+                  bool isValid = EmailValidator.validate(value);
+                  if(isValid) {
+                    setState(() {
+                      error = "";
+                      email = value;
+                    });
+                  }else {
+                    setState(() {
+                      error = "Invalid Email!";
+                    });
+                    return;
+                  }
+                  setState(() {
+                    email = value;
+                  });
+                },
                 decoration: const InputDecoration(
                   labelText: "Email",
                   labelStyle: TextStyle(color: Colors.yellow),
@@ -111,8 +164,26 @@ class _SignUpPageState extends State<SignUp> with SingleTickerProviderStateMixin
                 controller: _passwordController,
                 obscureText: passState ? true : false,
                 style: const TextStyle(color: Colors.yellow),
-                decoration: InputDecoration(
+                onChanged: (value) {
+                  if (value.length > 6) {
+                    setState(() {
+                      error = "";
+                      password = value;
+                    });
+                  }
+                  else {
+                    setState(() {
+                      error = "Password should be of at least 6 characters!";
+                    });
+                    return;
+                  }
 
+
+                  setState(() {
+                    password = value;
+                  });
+                },
+                decoration: InputDecoration(
                   labelText: "Password",
                   labelStyle: const TextStyle(color: Colors.yellow),
                   border: const OutlineInputBorder(),
@@ -133,8 +204,36 @@ class _SignUpPageState extends State<SignUp> with SingleTickerProviderStateMixin
               ),
               const SizedBox(height: 32),
               ElevatedButton(
-                onPressed: () {
-                  // Add signup logic here
+                onPressed: () async {
+                  bool state = await _firestoreDatabase
+                      .checkForUserRegister(email);
+
+                  if (!state) {
+                    setState(() {
+                      error = "";
+                    });
+
+                    User? user = await _auth
+                        .registerUserwithEmailAndPassword(
+                        email, password);
+
+                    await FirebaseMessaging.instance.getToken().then((token){
+                      setState(() {
+                        mtoken = token!;
+                      });
+                    });
+
+                    String? uid = user?.uid;
+                    _firestoreDatabase.addUser(
+                        username, email, uid, mtoken);
+
+                    Navigator.pushReplacementNamed(
+                        context, '/friends');
+                  } else {
+                    setState(() {
+                      error = "User already exists! Try Logging In.";
+                    });
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.black, backgroundColor: Colors.yellow, padding: const EdgeInsets.all(16),

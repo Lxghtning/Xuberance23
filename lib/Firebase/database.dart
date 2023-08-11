@@ -8,12 +8,11 @@ class Database {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<void> addUser(name, email, gender, uid, token) {
+  Future<void> addUser(name, email, uid, token) {
     return _firestore.collection('users')
         .doc(uid).set({
       'name': name,
       'email': email,
-      'gender': gender,
       'uid': uid,
       'friendsIDList': [],
       'friendsNameList': [],
@@ -23,6 +22,7 @@ class Database {
       'messagesSent': [],
       'messagesFrom': [],
       'messagesTo': [],
+      'messagesBoolean': [],
       'feed': [],
       'feedID':[],
       'token': token,

@@ -1,5 +1,9 @@
+import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hackathonxcodexuberance/Authentication/signup.dart';
+
+import '../Firebase/auth.dart';
 
 void main() => runApp(const MyApp());
 
@@ -31,6 +35,13 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
 
   AnimationController? _animationController;
   Animation<double>? _fadeAnimation;
+
+  final AuthService _auth = AuthService();
+
+  String email = "";
+  String error = "";
+  String password = "";
+  String resetEmail = "";
 
   bool passState = true;
 
@@ -95,6 +106,20 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
                     ),
                     prefixIcon: Icon(Icons.email, color: Colors.yellow),
                   ),
+                    onChanged: (value){
+                      bool isValid = EmailValidator.validate(value);
+                      if(isValid) {
+                        setState(() {
+                          error = "";
+                          email = value;
+                        });
+                      }else{
+                        setState(() {
+                          error = "Invalid Email!";
+                        });
+                      }
+
+                    }
                 ),
                 const SizedBox(height: 16),
                 TextField(
@@ -119,6 +144,11 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
                         },
                       )
                   ),
+                  onChanged: (value){
+                    setState(() {
+                      password = value;
+                    });
+                  },
                 ),
                 Align(
                   alignment: Alignment.centerRight,
@@ -134,8 +164,20 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
                 ),
                 const SizedBox(height: 32),
                 ElevatedButton(
-                  onPressed: () {
-                    // Add login logic here
+                  onPressed: () async {
+                    try {
+                      await _auth
+                          .signInUserwithEmailAndPassword(email,
+                          password);
+                      Navigator.pushReplacementNamed(context, '/friends');
+
+                    }catch(e){
+                      if (e is FirebaseAuthException && e.code == 'user-not-found') {
+                        setState(() {
+                          error = "User not found! Try registering.";
+                        });
+                      }
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.black, backgroundColor: Colors.yellow, padding: const EdgeInsets.all(16),
@@ -199,6 +241,11 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
                   labelText: "Email",
                   prefixIcon: Icon(Icons.email),
                 ),
+                onChanged: (value){
+                  setState(() {
+                    resetEmail = value;
+                  });
+                },
               ),
             ],
           ),
@@ -211,8 +258,8 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
             ),
             TextButton(
               child: const Text("Submit"),
-              onPressed: () {
-                // Handle the password reset logic
+              onPressed: () async{
+                await _auth.resetPassword(resetEmail);
                 Navigator.of(context).pop();
               },
             ),
