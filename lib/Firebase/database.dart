@@ -24,6 +24,7 @@ class Database {
       'messagesBoolean': [],
       'feed': [],
       'feedID':[],
+      'feedBoolean':[],
       'token': token,
     })
         .then((value) => print("User Added"))
@@ -433,7 +434,7 @@ class Database {
     return currentUserDetails;
   }
 
-  Future addFeed(String post) async{
+  Future addFeed(String post, bool isPic) async{
     List friendsIDList = await sendFriendsIDList();
     int i=0;
     await _firestore.collection('users')
@@ -444,6 +445,19 @@ class Database {
           if (doc['uid'] == friendsIDList[i]) {
             List feedList = doc['feed'];
             List feedID = doc['feedID'];
+            List feedPic = doc['feedBoolean'];
+            if(isPic){
+              feedPic.add(true);
+              doc.reference.update({
+                'feedBoolean': feedPic,
+              });
+            }
+            else{
+              feedPic.add(false);
+              doc.reference.update({
+                'feedBoolean': feedPic,
+              });
+            }
             feedList.insert(0, post);
             feedID.insert(0, _auth.currentUser?.uid);
             doc.reference.update({
@@ -460,11 +474,14 @@ class Database {
         if (doc['uid'] == _auth.currentUser?.uid) {
           List feedList = doc['feed'];
           List feedID = doc['feedID'];
+          List feedBoolean = doc['feedBoolean'];
           feedList.insert(0, post);
           feedID.insert(0, _auth.currentUser?.uid);
+          feedBoolean.insert(0, isPic);
           doc.reference.update({
             'feed': feedList,
             'feedID': feedID,
+            'feedBoolean': feedBoolean,
           });
         }
       }
@@ -546,6 +563,20 @@ class Database {
     return messagesBoolean;
   }
 
+
+  Future sendFeedBooleanList() async {
+    List feedBoolean = [];
+    await _firestore.collection('users')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        if (doc['uid'] == _auth.currentUser?.uid) {
+          feedBoolean = doc['feedBoolean'];
+        }
+      }
+    });
+    return feedBoolean;
+  }
 
 
 }
