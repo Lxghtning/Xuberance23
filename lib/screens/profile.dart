@@ -165,6 +165,15 @@ class _ProfileState extends State<Profile> {
                             ),
                           ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 210, 320, 0),
+                          child: FloatingActionButton(
+                            onPressed: (){
+                              print('Hello World');
+                            },
+                            child: const Icon(Icons.edit, color: Colors.redAccent,),
+                          ),
+                        )
                       ],
                     ),
                   ),
