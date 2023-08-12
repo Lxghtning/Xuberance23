@@ -26,9 +26,10 @@ void main() async{
   runApp(MaterialApp(
       initialRoute: FirebaseAuth.instance.currentUser != null ? '/' : '/login',
       routes: {
-        '/': (context) => Dashboard(),
-        '/signup': (context) => SignUp(),
-        '/friends': (context) => Friends(),
+        '/': (context) => const Dashboard(),
+        '/login': (context) => const Login(),
+        '/signup': (context) => const SignUp(),
+        '/friends': (context) => const Friends(),
       }));
 }
 

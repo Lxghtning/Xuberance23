@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hackathonxcodexuberance/screens/song.dart';
+import 'package:hackathonxcodexuberance/screens/videos.dart';
 
 import 'feed.dart';
 import 'friends.dart';
 import 'messages.dart';
+import 'profile.dart';
 
-void main() => runApp(EntertainmentApp());
+void main() => runApp(const EntertainmentApp());
 
 class EntertainmentApp extends StatelessWidget {
+  const EntertainmentApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,12 +21,14 @@ class EntertainmentApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         scaffoldBackgroundColor: Colors.blueGrey,
       ),
-      home: Dashboard(),
+      home: const Dashboard(),
     );
   }
 }
 
 class Dashboard extends StatelessWidget {
+  const Dashboard({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,10 +51,10 @@ class Dashboard extends StatelessWidget {
                 mainAxisSpacing: 10,
                 crossAxisCount: 2,
                 children: <Widget>[
-                  buildDashboardItem(Icons.tv, 'Youtube', Colors.red, Colors.redAccent),
-                  buildDashboardItem(Icons.music_note, 'Music', Colors.blue, Colors.blueAccent),
-                  buildDashboardItem(Icons.games, 'Games', Colors.purple, Colors.purpleAccent),
-                  buildDashboardItem(Icons.book, 'Books', Colors.orange, Colors.orangeAccent),
+                  buildDashboardItem(Icons.tv, 'Youtube', Colors.red, Colors.redAccent,context),
+                  buildDashboardItem(Icons.music_note, 'Music', Colors.blue, Colors.blueAccent,context),
+                  buildDashboardItem(Icons.games, 'Games', Colors.purple, Colors.purpleAccent,context),
+                  buildDashboardItem(Icons.book, 'Books', Colors.orange, Colors.orangeAccent,context),
 
                 ],
               ),
@@ -103,13 +110,19 @@ class Dashboard extends StatelessWidget {
               MaterialPageRoute(
                   builder: (BuildContext context) => const Feed()),
             );
+          }else if(index == 4){
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => const Profile()),
+            );
           }
         },
       ),
     );
   }
 
-  Widget buildDashboardItem(IconData icon, String label, Color color1, Color color2) {
+  Widget buildDashboardItem(IconData icon, String label, Color color1, Color color2,BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
@@ -117,7 +130,20 @@ class Dashboard extends StatelessWidget {
       elevation: 5,
       child: InkWell(
         onTap: () {
-          print('$label tapped');
+          print(label);
+          if(label == 'Youtube'){
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => const Videos()),
+            );
+          } else if(label == 'Music'){
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => const Song()),
+            );
+          }
         },
         child: Container(
           decoration: BoxDecoration(
@@ -133,10 +159,10 @@ class Dashboard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Icon(icon, size: 50, color: Colors.white),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 label,
-                style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ],
           ),
