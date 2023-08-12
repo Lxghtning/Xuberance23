@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:googleapis/youtube/v3.dart' as yt;
 import 'package:googleapis_auth/googleapis_auth.dart' as auth;
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'video.dart';
 
-class Videos extends StatefulWidget {
-  const Videos({super.key});
+class Search extends StatefulWidget {
+  final String? videoName;
+
+  const Search({super.key, this.videoName});
 
   @override
-  State<Videos> createState() => _VideosState();
+  State<Search> createState() => _SearchState();
 }
 
-class _VideosState extends State<Videos> {
+class _SearchState extends State<Search> {
   yt.YouTubeApi? _youtubeApi;
-  final videoURL = 'https://www.youtube.com/watch?v=YMx8Bbev6T4';
-  late YoutubePlayerController _controller;
-
+  var videoID = "";
   @override
   void initState() {
     super.initState();
@@ -23,7 +23,7 @@ class _VideosState extends State<Videos> {
 
   void _initializeYouTubeApi() async {
     final credentials = auth.clientViaApiKey(
-      'AIzaSyCdD9BXlW7v95tEpxnvyeVJwrCD4tvSryk'// Replace with your API Key
+        'AIzaSyCdD9BXlW7v95tEpxnvyeVJwrCD4tvSryk' // Replace with your API Key
     );
     _youtubeApi = yt.YouTubeApi(credentials);
     await _searchVideo();
@@ -31,7 +31,13 @@ class _VideosState extends State<Videos> {
 
   Future<void> _searchVideo() async {
     try {
-      final searchQuery = 'Unity - TheFatRat';
+      String? searchQuery = widget.videoName; // accessing videoName
+
+      if (searchQuery == null) {
+        print('Search query is null.');
+        return;
+      }
+
       final searchResponse = await _youtubeApi!.search.list(
         ['snippet'],
         q: searchQuery,
@@ -39,10 +45,10 @@ class _VideosState extends State<Videos> {
       );
 
       if (searchResponse.items != null && searchResponse.items!.isNotEmpty) {
-        final videoId = searchResponse.items![0].id!.videoId;
+        videoID = searchResponse.items![0].id!.videoId!;
         var x = searchResponse.items![0].toJson()['snippet'];
-        print(x.toJson());
-        print('Video ID: $videoId');
+        print(x);
+        print('Video ID: $videoID');
         // Now you have the video ID, you can use it to display the video or perform other operations.
       } else {
         print('No videos found.');
@@ -51,16 +57,20 @@ class _VideosState extends State<Videos> {
       print('Error searching for videos: $e');
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('YouTube Video Search'),
+        title: const Text('YouTube Video Search'),
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [],
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          FloatingActionButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Video(videoId: videoID)));
+          },
+          )
+        ],
       ),
     );
   }
