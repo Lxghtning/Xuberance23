@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:googleapis/youtube/v3.dart' as yt;
 import 'package:googleapis_auth/googleapis_auth.dart' as auth;
 import 'video.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class SearchSong extends StatefulWidget {
   final String? videoName;
@@ -65,12 +66,19 @@ class _SearchState extends State<SearchSong> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('YouTube Video Search'),
+      body: Container(
+        alignment: Alignment.center,
+        color: Colors.lightBlue,
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SpinKitChasingDots(
+              color: Colors.white,
+              size: 150,
+            ),
+          ],
+        ),
       ),
-      // Set the body to a loading circle
-
-      body: const CircularProgressIndicator(),
 
     );
   }

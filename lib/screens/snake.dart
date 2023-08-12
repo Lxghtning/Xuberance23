@@ -68,7 +68,7 @@ class _SnakeState extends State<Snake>{
             snakeGame ?? const Text("Not initialized"),
             const SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: () => Navigator.push(context, MaterialPageRoute(
+              onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(
                   builder: (BuildContext context) => const Games()),
               ),
               child: const Icon(
@@ -80,7 +80,7 @@ class _SnakeState extends State<Snake>{
             ElevatedButton(
               onPressed: ()
               {
-                Navigator.push(context, MaterialPageRoute(
+                Navigator.pushReplacement(context, MaterialPageRoute(
                   builder: (BuildContext context) => const Snake())
                 );
               },

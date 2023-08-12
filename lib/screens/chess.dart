@@ -49,7 +49,7 @@ class _GameState extends State<Game> {
           children: <Widget>[
             ElevatedButton(
               onPressed: (){
-                Navigator.push(context, MaterialPageRoute(
+                Navigator.pushReplacement(context, MaterialPageRoute(
                     builder: (BuildContext context) => const Games()),
                 );
               },
