@@ -100,7 +100,7 @@ class _SignUpPageState extends State<SignUp> with SingleTickerProviderStateMixin
               const Padding(
                 padding: EdgeInsets.fromLTRB(0, 150, 0, 0),
                 child: Text(
-                  "Sign Up",
+                  "Register all your fun with us!",
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
