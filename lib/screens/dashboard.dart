@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'games.dart';
 import 'genre.dart';
 import 'song.dart';
@@ -37,12 +38,12 @@ class Dashboard extends StatelessWidget {
         color: Colors.blueGrey,
         child: Column(
           children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(50, 150, 50,0),
-            child: Text(
+           Padding(
+            padding: const EdgeInsets.fromLTRB(50, 150, 50,0),
+            child: const Text(
             "Hey there! Whats on your mind today?",
-            style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
-        ),
+            style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
+        ).animate().fadeIn(duration: 1200.ms),
           ),
 
             Expanded(
@@ -52,10 +53,10 @@ class Dashboard extends StatelessWidget {
                 mainAxisSpacing: 10,
                 crossAxisCount: 2,
                 children: <Widget>[
-                  buildDashboardItem(Icons.tv, 'Videos', Colors.red, Colors.redAccent,context),
-                  buildDashboardItem(Icons.music_note, 'Music', Colors.blue, Colors.blueAccent,context),
-                  buildDashboardItem(Icons.games, 'Games', Colors.purple, Colors.purpleAccent,context),
-                  buildDashboardItem(Icons.book, 'Where\'s my food?', Colors.orange, Colors.orangeAccent,context),
+                  buildDashboardItem(Icons.tv, 'Videos', Colors.red, Colors.redAccent,context).animate().fade(duration: 1000.ms).scale(duration: 1000.ms),
+                  buildDashboardItem(Icons.music_note, 'Music', Colors.blue, Colors.blueAccent,context).animate().fade(duration: 1000.ms).scale(duration: 1000.ms),
+                  buildDashboardItem(Icons.games, 'Games', Colors.purple, Colors.purpleAccent,context).animate().fade(duration: 1000.ms).scale(duration: 1000.ms),
+                  buildDashboardItem(Icons.book, 'Where\'s my food?', Colors.orange, Colors.orangeAccent,context).animate().fade(duration: 1000.ms).scale(duration: 1000.ms),
 
                 ],
               ),
@@ -133,19 +134,19 @@ class Dashboard extends StatelessWidget {
         onTap: () {
           print(label);
           if(label == 'Videos'){
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) => const SearchVid()),
             );
           } else if(label == 'Music'){
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) => const Genre()),
             );
           } else if(label == 'Games'){
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) => const Games()),
