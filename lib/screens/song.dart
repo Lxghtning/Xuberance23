@@ -2,8 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'dashboard.dart';
+import 'feed.dart';
+import 'friends.dart';
+import 'messages.dart';
 import 'search.dart';
-
+import'profile.dart';
 
 
 class Song extends StatefulWidget {
@@ -15,10 +19,10 @@ class Song extends StatefulWidget {
 
 class _SongState extends State<Song>{
 
+  String token = "BQBgT_LQMdhV4hz5JZ1YomcpTgLtk0NdDFJdSmr1ldh2jk2H3svqorqJBzNQuNsPaGTgQ1swdPhyyHUgUKg3h1htr7wQdawnEdhmE1N2WS7FxsNJG1I";
+  String genre = 'pop';
 
   Future getData()async{
-    String genre = 'pop';
-    String token = "BQAdZf_-VIU6YVajT2PhZzLMWVagtY1Rw1i3VQrb-GOocemMhCdCPurLp_fMrP84SwOzVgJ28ZvtXbj2UzlcTX9B0ZMUK9FZj034uDcvr5B9BFqJhm8";
     String url = 'https://api.spotify.com/v1/recommendations?limit=2&seed_artists=4NHQUGzhtTLFvgF5SZesLK&seed_genres=$genre&seed_tracks=0c6xIDDpzE81m2q797ordA';
     String header = 'Bearer $token';
     
@@ -28,14 +32,11 @@ class _SongState extends State<Song>{
   }
 
   Future<Map<String, dynamic>> getFirstTrack() async {
-    String url =
-        'https://api.spotify.com/v1/recommendations?seed_artists=4NHQUGzhtTLFvgF5SZesLK&seed_genres=rock&seed_tracks=0c6xIDDpzE81m2q797ordA';
-    String token = "BQAdZf_-VIU6YVajT2PhZzLMWVagtY1Rw1i3VQrb-GOocemMhCdCPurLp_fMrP84SwOzVgJ28ZvtXbj2UzlcTX9B0ZMUK9FZj034uDcvr5B9BFqJhm8";
+    String url = 'https://api.spotify.com/v1/recommendations?seed_artists=4NHQUGzhtTLFvgF5SZesLK&seed_genres=$genre&seed_tracks=0c6xIDDpzE81m2q797ordA';
 
     String header = 'Bearer $token';
 
-    http.Response response =
-    await http.get(Uri.parse(url), headers: {'Authorization': header});
+    http.Response response = await http.get(Uri.parse(url), headers: {'Authorization': header});
 
     Map<String, dynamic> jsonData = jsonDecode(response.body);
     return jsonData;
@@ -68,11 +69,9 @@ class _SongState extends State<Song>{
               var type = jsonData['tracks'][0]['album']['album_type'];
               var releaseDate = jsonData['tracks'][0]['album']['release_date'];
               var id = jsonData['tracks'][0]['album']['id'];
-              String song = '';
+              String song = lpName;
 
-              if(type == 'single') {
-                song = lpName;
-              }else {
+              if (type != 'single'){
                 getFirstTrack().then((firstTrackData) {
                   print(firstTrackData);
                   song = firstTrackData['tracks'][0]['name'];
@@ -83,15 +82,101 @@ class _SongState extends State<Song>{
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  FloatingActionButton(onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Search(videoName: song)));
-                  },
-                  )
+                  // Display album photo
+                  Image.network(imageURL, height: 300, width: 300, fit: BoxFit.cover),
+
+                  const SizedBox(height: 20), // Gives some spacing between the image and the text
+
+                  // Name of the Artist
+                  Text('Artist: $artistName', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+
+                  // Name of the first Track
+                  Text('Track: $song', style: const TextStyle(fontSize: 20)),
+
+                  // Name of the Album
+                  Text('From Album: $lpName', style: const TextStyle(fontSize: 20)),
+
+                  // Date Released
+                  Text('Released on: $releaseDate', style: const TextStyle(fontSize: 20)),
+
+                  const SizedBox(height: 20), // Gives some spacing between the text and the button
+
+                  // Button
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Search(videoName: song)));
+                      },
+                      child: const Text('Watch on YouTube')
+                  ),
                 ],
               );
+
             }
           },
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            label: 'Friends',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.messenger_rounded),
+            label: 'Messages',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.view_agenda),
+            label: 'Feed',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.dashboard),
+            label: 'Dashboard',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+
+        ],
+        currentIndex: 3,
+        selectedItemColor: Colors.amber,
+        type: BottomNavigationBarType.fixed,
+        onTap: (int index) {
+          if(index == 0){
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => const Friends()),
+            );
+          }
+          else if(index == 1){
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => const Messages()),
+            );
+          }
+          else if(index == 2){
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => const Feed()),
+            );
+          }else if(index == 3){
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => const Dashboard()),
+            );
+          }else if(index == 4){
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => const Profile()),
+            );
+          }
+        },
       ),
     );
   }
