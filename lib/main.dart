@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:hackathonxcodexuberance/Authentication/signup.dart';
+import 'package:hackathonxcodexuberance/screens/dashboard.dart';
 import 'package:hackathonxcodexuberance/screens/friends.dart';
 import '../Authentication/login.dart';
 
@@ -22,10 +24,11 @@ void main() async{
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   runApp(MaterialApp(
-      // initialRoute: FirebaseAuth.instance.currentUser != null ? '/friends' : '/login',
+      initialRoute: FirebaseAuth.instance.currentUser != null ? '/' : '/login',
       routes: {
-        '/': (context) => Friends(),
+        '/': (context) => Dashboard(),
         '/signup': (context) => SignUp(),
+        '/friends': (context) => Friends(),
       }));
 }
 

@@ -18,8 +18,7 @@ class Database {
       'friendsNameList': [],
       'friendRequestsIDList': [],
       'friendRequestsNameList': [],
-      'messagesReceived': [],
-      'messagesSent': [],
+      'messages': [],
       'messagesFrom': [],
       'messagesTo': [],
       'messagesBoolean': [],
@@ -336,21 +335,25 @@ class Database {
   }
 
   Future sendMessageCurrentUser(String name, String message) async {
-    List messagesSent = [];
+    List messages = [];
     List messagesTo = [];
+    List messagesBoolean = [];
 
     await _firestore.collection('users')
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
         if (doc['uid'] == _auth.currentUser?.uid) {
-          messagesSent = doc['messagesSent'];
+          messages = doc['messages'];
           messagesTo = doc['messagesTo'];
-          messagesSent.add(message);
+          messagesBoolean = doc['messagesBoolean'];
+          messages.add(message);
           messagesTo.add(name);
+          messagesBoolean.add(true);
           doc.reference.update({
-            'messagesSent': messagesSent,
+            'messages': messages,
             'messagesTo': messagesTo,
+            'messagesBoolean': messagesBoolean,
           });
         }
       }
@@ -360,7 +363,8 @@ class Database {
 
   Future sendMessageToFriend(String name, String message) async {
     List messagesFrom = [];
-    List messagesReceived = [];
+    List messages = [];
+    List messagesBoolean = [];
 
     String id = await friendID(name);
     String currentUserName = await friendName(_auth.currentUser!.uid);
@@ -371,21 +375,22 @@ class Database {
       for (var doc in querySnapshot.docs) {
         if (doc['uid'] == id) {
           messagesFrom = doc['messagesFrom'];
-          messagesReceived = doc['messagesReceived'];
-
-          messagesReceived.insert(0, message);
+          messages = doc['messages'];
+          messagesBoolean = doc['messagesBoolean'];
+          messages.add(message);
           messagesFrom.add(currentUserName);
-
+          messagesBoolean.add(false);
           doc.reference.update({
             'messagesFrom': messagesFrom,
-            'messagesReceived': messagesReceived,
+            'messages': messages,
+            'messagesBoolean': messagesBoolean,
           });
         }
       }
     });
   }
 
-  Future messagesSentListSend(name) async {
+  Future messagesListSend(name) async {
     List messagesSent = [];
     List messagesTo = [];
 
@@ -394,7 +399,7 @@ class Database {
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
         if (doc['uid'] == _auth.currentUser?.uid) {
-          messagesSent = doc['messagesSent'];
+          messagesSent = doc['messages'];
           messagesTo = doc['messagesTo'];
           for(int i = 0; i<messagesTo.length; i++){
             if(messagesTo[i] != name){
@@ -408,27 +413,6 @@ class Database {
     return messagesSent;
   }
 
-  Future messagesReceivedListSend(String name) async {
-    List messagesReceived = [];
-    List messagesFrom = [];
-
-    await _firestore.collection('users')
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      for (var doc in querySnapshot.docs) {
-        if (doc['uid'] == _auth.currentUser?.uid) {
-          messagesReceived = doc['messagesReceived'];
-          messagesFrom = doc['messagesFrom'];
-          for(int i = 0; i<messagesFrom.length; i++){
-            if(messagesFrom[i] != name){
-              messagesReceived.remove(messagesReceived[i]);
-            }
-          }
-        }
-      }
-    });
-    return messagesReceived;
-  }
 
 
   Future sendCurrentUserDetails() async {
@@ -438,10 +422,9 @@ class Database {
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
         if (doc['uid'] == _auth.currentUser?.uid) {
-          List temp = doc['friendsNameList'];
+          List temp = doc['friendsIDList'];
           currentUserDetails['name'] = doc['name'];
           currentUserDetails['email'] = doc['email'];
-          currentUserDetails['gender'] = doc['gender'];
           currentUserDetails['friendCount'] = temp.length;
         }
       }
@@ -549,19 +532,20 @@ class Database {
     return id;
   }
 
-  Future friendGender(String id) async {
-    String gender = '';
+  Future sendMessagesBooleanList() async {
+    List messagesBoolean = [];
     await _firestore.collection('users')
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
-        if (doc['uid'] == id) {
-          gender = doc['gender'];
+        if (doc['uid'] == _auth.currentUser?.uid) {
+          messagesBoolean = doc['messagesBoolean'];
         }
       }
     });
-    return gender;
+    return messagesBoolean;
   }
+
 
 
 }

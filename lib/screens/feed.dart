@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dashboard.dart';
 import 'friends.dart';
 import 'messages.dart';
 import '../Firebase/auth.dart';
@@ -40,6 +42,7 @@ class _FeedState extends State<Feed> {
     feedName = feedOGNameList;
   }
 
+
   void updateFeedNameList(String query){
     setState(() {
       feedName = feedOGNameList.where((users) => users.toLowerCase().contains(query.toLowerCase())).toList();
@@ -51,7 +54,7 @@ class _FeedState extends State<Feed> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.lightBlue,
+        color: Colors.blueGrey,
         alignment: Alignment.center,
         child: SafeArea(
           child: Column(
@@ -66,7 +69,7 @@ class _FeedState extends State<Feed> {
                   ),
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Colors.lightBlueAccent,
+                    fillColor: Colors.blueGrey[300],
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide.none,
@@ -194,6 +197,10 @@ class _FeedState extends State<Feed> {
             label: 'Feed',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.dashboard),
+            label: 'Dashboard',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
@@ -217,6 +224,13 @@ class _FeedState extends State<Feed> {
             );
           }
           else if(index == 3) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => Dashboard()),
+            );
+          }
+          else if(index == 4) {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(

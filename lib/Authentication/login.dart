@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hackathonxcodexuberance/Authentication/signup.dart';
 
 import '../Firebase/auth.dart';
+import '../screens/friends.dart';
 
 void main() => runApp(const MyApp());
 
@@ -70,7 +71,7 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
       greeting = "Good Evening!";
     }
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.blueGrey,
       body: SingleChildScrollView(
         child: FadeTransition(
           opacity: _fadeAnimation!,
@@ -169,7 +170,11 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
                       await _auth
                           .signInUserwithEmailAndPassword(email,
                           password);
-                      Navigator.pushReplacementNamed(context, '/friends');
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => const Friends()),
+                      );
 
                     }catch(e){
                       if (e is FirebaseAuthException && e.code == 'user-not-found') {

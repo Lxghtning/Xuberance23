@@ -5,6 +5,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:hackathonxcodexuberance/Authentication/login.dart';
 import '../Firebase/auth.dart';
 import '../Firebase/database.dart';
+import '../screens/friends.dart';
 
 void main() => runApp(const MyApp());
 
@@ -86,7 +87,7 @@ class _SignUpPageState extends State<SignUp> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.blueGrey,
         body: SingleChildScrollView(
         child: FadeTransition(
         opacity: _fadeAnimation!,
@@ -227,8 +228,12 @@ class _SignUpPageState extends State<SignUp> with SingleTickerProviderStateMixin
                     _firestoreDatabase.addUser(
                         username, email, uid, mtoken);
 
-                    Navigator.pushReplacementNamed(
-                        context, '/friends');
+                    print("done");
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => const Friends()),
+                    );
                   } else {
                     setState(() {
                       error = "User already exists! Try Logging In.";

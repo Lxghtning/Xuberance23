@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dashboard.dart';
 import 'feed.dart';
 import 'messages.dart';
 import 'profile.dart';
@@ -61,6 +62,7 @@ class _FriendsState extends State<Friends> {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.blueGrey,
             bottom: const TabBar(
               tabs: [
                 Tab(icon: Icon(Icons.person_search_rounded)),
@@ -70,7 +72,7 @@ class _FriendsState extends State<Friends> {
             ),
           ),
           body:Container(
-            color: Colors.lightBlue,
+            color: Colors.blueGrey,
             alignment: Alignment.center,
             child: TabBarView(
                 children:[
@@ -87,7 +89,7 @@ class _FriendsState extends State<Friends> {
                           ),
                           decoration: InputDecoration(
                             filled: true,
-                            fillColor: Colors.lightBlueAccent,
+                            fillColor: Colors.blueGrey[300],
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide.none,
@@ -121,6 +123,12 @@ class _FriendsState extends State<Friends> {
                                           icon: const Icon(Icons.send),
                                           onPressed: () {
                                             _firestoreDatabase.friendRequestFunction(userList[index]);
+                                            Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                            builder: (BuildContext context) => const  Friends()),
+                                            );
+
                                           }
                                       ),
                                     ],
@@ -191,7 +199,7 @@ class _FriendsState extends State<Friends> {
                           ),
                           decoration: InputDecoration(
                             filled: true,
-                            fillColor: Colors.lightBlueAccent,
+                            fillColor: Colors.blueGrey[300],
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide.none,
@@ -254,6 +262,10 @@ class _FriendsState extends State<Friends> {
                 label: 'Feed',
               ),
               BottomNavigationBarItem(
+                icon: Icon(Icons.dashboard),
+                label: 'Dashboard',
+              ),
+              BottomNavigationBarItem(
                 icon: Icon(Icons.person),
                 label: 'Profile',
               ),
@@ -274,6 +286,13 @@ class _FriendsState extends State<Friends> {
                 );
               }
               else if(index == 3) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => Dashboard()),
+                );
+              }
+              else if(index == 4) {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(

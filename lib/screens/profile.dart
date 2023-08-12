@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../Authentication/login.dart';
 import '../Firebase/auth.dart';
 import '../Firebase/database.dart';
+import 'dashboard.dart';
 import 'feed.dart';
 import 'friends.dart';
 import 'messages.dart';
@@ -39,7 +41,7 @@ class _ProfileState extends State<Profile> {
     currentUserDetails = await _firestoreDatabase.sendCurrentUserDetails();
     name = currentUserDetails['name'];
     email = currentUserDetails['email'];
-    gender = currentUserDetails['gender'];
+    print(email + " " + name);
   }
 
 
@@ -47,7 +49,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.lightBlue,
+        color: Colors.blueGrey,
         alignment: Alignment.center,
         child: SafeArea(
           child: Column(
@@ -61,7 +63,11 @@ class _ProfileState extends State<Profile> {
                   ),
                   onPressed: () async{
                     await _auth.signOut();
-                    Navigator.pushReplacementNamed(context, '/login');
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => const Login()),
+                    );
                   },
                 ),
               ),
@@ -69,7 +75,7 @@ class _ProfileState extends State<Profile> {
               const Padding(
                 padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/pfp.jpeg'),
+                  backgroundColor: Colors.yellow,
                   radius: 50.0,
                 ),
               ),
@@ -148,16 +154,6 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(10, 50, 330, 0),
-                        child: Text(
-                          "Gender",
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 15.0
-                          ),
-                        ),
-                      ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(10, 0, 335, 0),
                         child: Text(
@@ -191,11 +187,15 @@ class _ProfileState extends State<Profile> {
             label: 'Feed',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.dashboard),
+            label: 'Dashboard',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
         ],
-        currentIndex: 3,
+        currentIndex: 4,
         selectedItemColor: Colors.amber,
         type: BottomNavigationBarType.fixed,
         onTap: (int index) {
@@ -218,6 +218,14 @@ class _ProfileState extends State<Profile> {
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) => const Feed()),
+            );
+          }
+          else if(index ==3){
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      Dashboard()),
             );
           }
         },

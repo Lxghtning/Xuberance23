@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'dashboard.dart';
 import 'friends.dart';
 import 'profile.dart';
 import 'package:http/http.dart' as http;
@@ -58,7 +59,7 @@ class _MessagesState extends State<Messages>{
   Widget build(BuildContext context) {
     return loading ? Loading(context) : Scaffold(
       body:Container(
-        color: Colors.lightBlue,
+        color: Colors.blueGrey,
         alignment: Alignment.center,
         child: SafeArea(
           child: Column(
@@ -73,7 +74,7 @@ class _MessagesState extends State<Messages>{
                   ),
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Colors.lightBlueAccent,
+                    fillColor: Colors.blueGrey[300],
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide.none,
@@ -136,6 +137,10 @@ class _MessagesState extends State<Messages>{
             label: 'Feed',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.dashboard),
+            label: 'Dashboard',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
@@ -162,6 +167,13 @@ class _MessagesState extends State<Messages>{
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
+                  builder: (BuildContext context) => Dashboard()),
+            );
+          }
+        else if(index == 4) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
                   builder: (BuildContext context) => const Profile()),
             );
           }
@@ -179,13 +191,12 @@ class Inbox extends StatefulWidget {
 }
 
 class _InboxState extends State<Inbox> {
-
-  List messagesReceived = [];
-  List messagesSent = [];
-
+  List messages = [];
+  List messagesBoolean = [];
   String message = '';
 
   bool state = false;
+
 
   @override
   void initState(){
@@ -258,8 +269,9 @@ class _InboxState extends State<Inbox> {
 
 
   Future<void> load() async{
-    messagesReceived = await _firestoreDatabase.messagesReceivedListSend(nameOfUserSelected);
-    messagesSent = await _firestoreDatabase.messagesSentListSend(nameOfUserSelected);
+    messages = await _firestoreDatabase.messagesListSend(nameOfUserSelected);
+    print(messages);
+    messagesBoolean = await _firestoreDatabase.sendMessagesBooleanList();
   }
 
   @override
@@ -277,31 +289,24 @@ class _InboxState extends State<Inbox> {
                 Navigator.pop(context);
               },
             ),
-            backgroundColor: Colors.lightBlue,
-            bottom: const TabBar(
-              tabs: [
-                Tab(icon: Icon(Icons.send_to_mobile)),
-                Tab(icon: Icon(Icons.send)),
-              ],
-            ),
+            backgroundColor: Colors.blueGrey,
           ),
           body:Container(
-            color: Colors.lightBlue,
-            child: TabBarView(
-              children: [
+            color: Colors.blueGrey,
+            child:
                 Column(
                     children: [
                       Expanded(
                         child: ListView.builder(
-                          itemCount: messagesSent.length,
+                          itemCount: messages.length,
                           itemBuilder: (context, index) {
                             return Card(
-                              color: Colors.lightGreenAccent,
+                              color: messagesBoolean[index] ? Colors.lightGreenAccent: Colors.white,
                               child: ListTile(
                                 onTap: (){
                                 },
                                 title: Text(
-                                  messagesSent[index],
+                                  messages[index],
                                   style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 20
@@ -337,12 +342,16 @@ class _InboxState extends State<Inbox> {
                             suffixIcon: IconButton(
                                 icon: const Icon(Icons.send),
                                 onPressed: () async{
+                                  if(message == ""){
+                                    return;
+                                  }
+
                                   await _firestoreDatabase.sendMessageToFriend(nameOfUserSelected, message);
                                   await _firestoreDatabase.sendMessageCurrentUser(nameOfUserSelected, message);
 
                                   await FirebaseMessaging.instance.getToken().then((token) {
                                     sendPushMessage(token!, nameOfUserSelected, message);
-                                    print("tokennnn");
+                                    print("token");
                                   });
 
                                   Navigator.pushReplacement(
@@ -357,29 +366,6 @@ class _InboxState extends State<Inbox> {
                         ),
                       ),
                     ]
-                ),
-                ListView.builder(
-                  itemCount: messagesReceived.length,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      child: ListTile(
-                        onTap: (){
-
-                        },
-                        title: Text(
-                          messagesReceived[index],
-                          style: const TextStyle(
-                              backgroundColor: Colors.white,
-                              color: Colors.black,
-                              fontSize: 24
-                          ),
-                        ),
-
-                      ),
-                    );
-                  },
-                ),
-              ],
             ),
           ),
         ),
