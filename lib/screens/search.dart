@@ -19,6 +19,9 @@ class _SearchState extends State<Search> {
   void initState() {
     super.initState();
     _initializeYouTubeApi();
+    Future.delayed(const  Duration(seconds: 2), () {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Video(videoId: videoID)));
+    });
   }
 
   void _initializeYouTubeApi() async {
@@ -49,6 +52,7 @@ class _SearchState extends State<Search> {
         var x = searchResponse.items![0].toJson()['snippet'];
         print(x);
         print('Video ID: $videoID');
+
         // Now you have the video ID, you can use it to display the video or perform other operations.
       } else {
         print('No videos found.');
@@ -57,21 +61,17 @@ class _SearchState extends State<Search> {
       print('Error searching for videos: $e');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('YouTube Video Search'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          FloatingActionButton(onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Video(videoId: videoID)));
-          },
-          )
-        ],
-      ),
+      // Set the body to a loading circle
+
+      body: const CircularProgressIndicator(),
+
     );
   }
 }

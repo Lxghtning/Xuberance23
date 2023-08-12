@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hackathonxcodexuberance/screens/song.dart';
-import 'package:hackathonxcodexuberance/screens/search.dart';
+import 'song.dart';
+import 'searchVid.dart';
 import 'feed.dart';
 import 'friends.dart';
 import 'messages.dart';
@@ -100,7 +100,7 @@ class Dashboard extends StatelessWidget {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => Messages()),
+                  builder: (BuildContext context) => const Messages()),
             );
           }
           else if(index == 2){
@@ -134,7 +134,7 @@ class Dashboard extends StatelessWidget {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => const Search()),
+                  builder: (BuildContext context) => const SearchVid()),
             );
           } else if(label == 'Music'){
             Navigator.pushReplacement(

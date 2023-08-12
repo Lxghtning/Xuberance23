@@ -14,6 +14,8 @@ final Database _firestoreDatabase = Database();
 String nameOfUserSelected = '';
 
 class Messages extends StatefulWidget{
+  const Messages({super.key});
+
   @override
   State<Messages> createState() => _MessagesState();
 }
