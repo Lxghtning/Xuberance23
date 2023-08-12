@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hackathonxcodexuberance/screens/song.dart';
-import 'package:hackathonxcodexuberance/screens/videos.dart';
-
+import 'package:hackathonxcodexuberance/screens/search.dart';
 import 'feed.dart';
 import 'friends.dart';
 import 'messages.dart';
@@ -51,10 +50,10 @@ class Dashboard extends StatelessWidget {
                 mainAxisSpacing: 10,
                 crossAxisCount: 2,
                 children: <Widget>[
-                  buildDashboardItem(Icons.tv, 'Youtube', Colors.red, Colors.redAccent,context),
+                  buildDashboardItem(Icons.tv, 'Videos', Colors.red, Colors.redAccent,context),
                   buildDashboardItem(Icons.music_note, 'Music', Colors.blue, Colors.blueAccent,context),
                   buildDashboardItem(Icons.games, 'Games', Colors.purple, Colors.purpleAccent,context),
-                  buildDashboardItem(Icons.book, 'Books', Colors.orange, Colors.orangeAccent,context),
+                  buildDashboardItem(Icons.book, 'Where\'s my food?', Colors.orange, Colors.orangeAccent,context),
 
                 ],
               ),
@@ -131,11 +130,11 @@ class Dashboard extends StatelessWidget {
       child: InkWell(
         onTap: () {
           print(label);
-          if(label == 'Youtube'){
+          if(label == 'Videos'){
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => const Videos()),
+                  builder: (BuildContext context) => const Search()),
             );
           } else if(label == 'Music'){
             Navigator.pushReplacement(
