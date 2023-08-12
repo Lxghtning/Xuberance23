@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hackathonxcodexuberance/screens/search.dart';
 import 'dart:convert';
-import 'package:hackathonxcodexuberance/screens/searchVid.dart';
 import 'package:http/http.dart' as http;
 import 'feed.dart';
 import 'friends.dart';
