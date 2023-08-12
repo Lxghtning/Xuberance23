@@ -67,26 +67,46 @@ class _SearchVidState extends State<SearchVid> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Search YouTube Video')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _controller,
-              decoration: const InputDecoration(
-                hintText: 'Enter video name',
-                border: OutlineInputBorder(),
+      appBar: AppBar(
+          title: const Text('Search Video'),
+        backgroundColor: Colors.blueGrey,
+      ),
+      body: Container(
+        color: Colors.blueGrey,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                child: TextField(
+                  controller: _controller,
+                  onChanged: (value){
+                  },
+                  style: const TextStyle(
+                    color: Colors.black,
+                  ),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.blueGrey[300],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                    ),
+                    hintText: "Search for a video",
+                    suffixIcon: IconButton(
+                        icon: const Icon(Icons.search),
+                        onPressed: () async{
+                          _searchVideo(_controller.text);
+                        }
+                    ),
+                    suffixIconColor: Colors.black,
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(  // RaisedButton is deprecated, use ElevatedButton instead
-              onPressed: () {
-                _searchVideo(_controller.text);  // Pass the inputted text to _searchVideo
-              },
-              child: const Text('Search Video'),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

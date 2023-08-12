@@ -46,50 +46,59 @@ class _SnakeState extends State<Snake>{
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.blueGrey,
           title: const Text("Snake"),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: () => snakeGame?.nextDirection = SNAKE_MOVE.left,
-                  icon: const Icon(Icons.subdirectory_arrow_left),
-                ),
-                const Text("SNAKE"),
-                IconButton(
-                  onPressed: () => snakeGame?.nextDirection = SNAKE_MOVE.right,
-                  icon: const Icon(Icons.subdirectory_arrow_right),
-                ),
-              ],
-            ),
-            snakeGame ?? const Text("Not initialized"),
-            const SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(
-                  builder: (BuildContext context) => const Games()),
+        body: Container(
+          color: Colors.blueGrey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: ()
+                    {
+                      Navigator.pushReplacement(context, MaterialPageRoute(
+                          builder: (BuildContext context) => const Snake())
+                      );
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.refresh,
+                        size: 25.0,
+                      ),
+                    ),
+                  ),
+
+                ]
               ),
-              child: const Icon(
-                Icons.arrow_back,
-                size: 60.0,
-              )
-            ),
-            const SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: ()
-              {
-                Navigator.pushReplacement(context, MaterialPageRoute(
-                  builder: (BuildContext context) => const Snake())
-                );
-              },
-              child: const Icon(
-                Icons.refresh,
-                size: 60.0,
+              const SizedBox(height: 20.0),
+              snakeGame ?? const Text("Not initialized"),
+              const SizedBox(height: 20.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: () => snakeGame?.nextDirection = SNAKE_MOVE.left,
+                    icon: const Icon(Icons.arrow_back_outlined, color: Colors.white, size: 50),
+                  ),
+                  const Padding(
+                    padding:  EdgeInsets.fromLTRB(70, 20, 55, 0),
+                    child:  Text("SNAKE", style: TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold),),
+                  ),
+                  IconButton(
+                    onPressed: () => snakeGame?.nextDirection = SNAKE_MOVE.right,
+                    icon: const Icon(Icons.arrow_forward_rounded, color: Colors.white,size: 50),
+                  ),
+                ],
               ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );

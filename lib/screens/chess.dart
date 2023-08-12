@@ -18,11 +18,11 @@ class _GameState extends State<Game> {
     super.initState();
     controller.addListener(() {
       if(controller.isCheckMate()) {
-        print("CHECKMATE BABY");
+        print("CHECKMATE");
       } else if(controller.isDraw()) {
-        print("DRAW BABY");
+        print("DRAW");
       } else if(controller.isStaleMate()) {
-        print("STALEMATE BABY");
+        print("STALEMATE  ");
       }
     });
   }

@@ -34,30 +34,38 @@ class _VideoState extends State<Video>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          YoutubePlayer(
-            controller: _controller,
-            showVideoProgressIndicator: true,
-            onReady: () {
-              print('Ready!');
-            },
-            bottomActions: [
-              CurrentPosition(),
-              ProgressBar(
-                isExpanded: true,
-                colors: const ProgressBarColors(
-                  playedColor: Colors.red,
-                  handleColor: Colors.redAccent,
-                ),
-              ),
-              const PlaybackSpeedButton(),
-              RemainingDuration(),
-              FullScreenButton(),
-            ],
-          )
-        ],
+      body: Container(
+        color: Colors.blueGrey,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                YoutubePlayer(
+                  controller: _controller,
+                  showVideoProgressIndicator: true,
+                  onReady: () {
+                    print('Ready!');
+                  },
+                  bottomActions: [
+                    CurrentPosition(),
+                    ProgressBar(
+                      isExpanded: true,
+                      colors: const ProgressBarColors(
+                        playedColor: Colors.red,
+                        handleColor: Colors.redAccent,
+                      ),
+                    ),
+                    const PlaybackSpeedButton(),
+                    RemainingDuration(),
+                    FullScreenButton(),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
