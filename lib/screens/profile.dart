@@ -48,127 +48,129 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.blueGrey,
-        alignment: Alignment.center,
-        child: SafeArea(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(350, 10, 0, 0),
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.logout,
-                    color: Colors.white,
+      body: SingleChildScrollView(
+        child: Container(
+          color: Colors.blueGrey,
+          alignment: Alignment.center,
+          child: SafeArea(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(350, 10, 0, 0),
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.logout,
+                      color: Colors.white,
+                    ),
+                    onPressed: () async{
+                      await _auth.signOut();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => const Login()),
+                      );
+                    },
                   ),
-                  onPressed: () async{
-                    await _auth.signOut();
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => const Login()),
-                    );
-                  },
                 ),
-              ),
 
-              const Padding(
-                padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: CircleAvatar(
-                  backgroundColor: Colors.yellow,
-                  radius: 50.0,
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.yellow,
+                    radius: 50.0,
+                  ),
                 ),
-              ),
 
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 37.5, 0, 0),
-                child: Container(
-                  width: 500,
-                  height: 567,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 37.5, 0, 0),
+                  child: Container(
+                    width: 500,
+                    height: 567,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(10, 50, 300, 0),
+                          child: Text(
+                            "Username",
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 15.0
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 250, 0),
+                          child: Text(
+                            name,
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 24.0
+                            ),
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(10, 50, 330, 0),
+                          child: Text(
+                            "Email",
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 15.0
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 0, 100, 0),
+                          child: Text(
+                            email,
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 20.0
+                            ),
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(10, 50, 300, 0),
+                          child: Text(
+                            "Friend Count",
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 15.0
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 0, 300, 0),
+                          child: Text(
+                            currentUserDetails['friendCount'].toString(),
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 24.0
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 0, 335, 0),
+                          child: Text(
+                            gender,
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 24.0
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  child: Column(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(10, 50, 300, 0),
-                        child: Text(
-                          "Username",
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 15.0
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 250, 0),
-                        child: Text(
-                          name,
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 24.0
-                          ),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(10, 50, 330, 0),
-                        child: Text(
-                          "Email",
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 15.0
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 100, 0),
-                        child: Text(
-                          email,
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 20.0
-                          ),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(10, 50, 300, 0),
-                        child: Text(
-                          "Friend Count",
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 15.0
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 300, 0),
-                        child: Text(
-                          currentUserDetails['friendCount'].toString(),
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 24.0
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 335, 0),
-                        child: Text(
-                          gender,
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 24.0
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

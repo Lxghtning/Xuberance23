@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'games.dart';
-import 'song.dart';
-import 'searchVid.dart';
+import 'package:hackathonxcodexuberance/screens/dashboard.dart';
+import 'package:hackathonxcodexuberance/screens/snake.dart';
+import 'chess.dart';
 import 'feed.dart';
 import 'friends.dart';
 import 'messages.dart';
@@ -21,13 +21,13 @@ class EntertainmentApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         scaffoldBackgroundColor: Colors.blueGrey,
       ),
-      home: const Dashboard(),
+      home: const Game(),
     );
   }
 }
 
-class Dashboard extends StatelessWidget {
-  const Dashboard({super.key});
+class Games extends StatelessWidget {
+  const Games({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +36,13 @@ class Dashboard extends StatelessWidget {
         color: Colors.blueGrey,
         child: Column(
           children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(50, 150, 50,0),
-            child: Text(
-            "Hey there! Whats on your mind today?",
-            style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
-        ),
-          ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(50, 150, 50,0),
+              child: Text(
+                "Have fun gaming!",
+                style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+            ),
 
             Expanded(
               child: GridView.count(
@@ -51,10 +51,8 @@ class Dashboard extends StatelessWidget {
                 mainAxisSpacing: 10,
                 crossAxisCount: 2,
                 children: <Widget>[
-                  buildDashboardItem(Icons.tv, 'Videos', Colors.red, Colors.redAccent,context),
-                  buildDashboardItem(Icons.music_note, 'Music', Colors.blue, Colors.blueAccent,context),
-                  buildDashboardItem(Icons.games, 'Games', Colors.purple, Colors.purpleAccent,context),
-                  buildDashboardItem(Icons.book, 'Where\'s my food?', Colors.orange, Colors.orangeAccent,context),
+                  buildGameItem(Icons.games, 'Chess', Colors.red, Colors.redAccent,context),
+                  buildGameItem(Icons.trending_down, 'Snake', Colors.blue, Colors.blueAccent,context),
 
                 ],
               ),
@@ -110,6 +108,12 @@ class Dashboard extends StatelessWidget {
               MaterialPageRoute(
                   builder: (BuildContext context) => const Feed()),
             );
+          }else if(index == 3){
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => const Dashboard()),
+            );
           }else if(index == 4){
             Navigator.pushReplacement(
               context,
@@ -122,7 +126,7 @@ class Dashboard extends StatelessWidget {
     );
   }
 
-  Widget buildDashboardItem(IconData icon, String label, Color color1, Color color2,BuildContext context) {
+  Widget buildGameItem(IconData icon, String label, Color color1, Color color2,BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
@@ -131,23 +135,17 @@ class Dashboard extends StatelessWidget {
       child: InkWell(
         onTap: () {
           print(label);
-          if(label == 'Videos'){
+          if(label == 'Chess'){
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => const SearchVid()),
+                  builder: (BuildContext context) => const Game()),
             );
-          } else if(label == 'Music'){
+          }else{
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => const Song()),
-            );
-          } else if(label == 'Games'){
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => const Games()),
+                  builder: (BuildContext context) => const Snake()),
             );
           }
         },
