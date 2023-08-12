@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'games.dart';
+import 'genre.dart';
 import 'song.dart';
 import 'searchVid.dart';
 import 'feed.dart';
@@ -132,19 +133,19 @@ class Dashboard extends StatelessWidget {
         onTap: () {
           print(label);
           if(label == 'Videos'){
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) => const SearchVid()),
             );
           } else if(label == 'Music'){
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => const Song()),
+                  builder: (BuildContext context) => const Genre()),
             );
           } else if(label == 'Games'){
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) => const Games()),

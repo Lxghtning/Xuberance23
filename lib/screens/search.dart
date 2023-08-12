@@ -3,16 +3,16 @@ import 'package:googleapis/youtube/v3.dart' as yt;
 import 'package:googleapis_auth/googleapis_auth.dart' as auth;
 import 'video.dart';
 
-class Search extends StatefulWidget {
+class SearchSong extends StatefulWidget {
   final String? videoName;
 
-  const Search({super.key, this.videoName});
+  const SearchSong({super.key, this.videoName});
 
   @override
-  State<Search> createState() => _SearchState();
+  State<SearchSong> createState() => _SearchState();
 }
 
-class _SearchState extends State<Search> {
+class _SearchState extends State<SearchSong> {
   yt.YouTubeApi? _youtubeApi;
   var videoID = "";
   @override
