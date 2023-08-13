@@ -21,6 +21,19 @@ class _MoviesState extends State<Movies> {
   List genreList = [];
 
   @override
+  void initState() {
+    super.initState();
+    load().then((result) {
+      setState(() {});
+    });
+  }
+
+
+  Future<void> load() async {
+    genreList = await _firestoreDatabase.sendDetailsGenre(searchQuery);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
@@ -46,10 +59,10 @@ class _MoviesState extends State<Movies> {
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide.none,
                   ),
-                  hintText: "Search for movies",
+                  hintText: "Enter Genre for Movies",
                   prefixIcon:  IconButton(icon: Icon(Icons.search),
                     onPressed: () async{
-                      // genreList = await _firestoreDatabase.sendDetaislGenre(searchQuery);
+                      genreList = await _firestoreDatabase.sendDetailsGenre(searchQuery);
                     }),
                   prefixIconColor: Colors.greenAccent,
                 ),

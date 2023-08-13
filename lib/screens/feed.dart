@@ -1,8 +1,8 @@
+
 import 'package:flutter/material.dart';
 import 'dashboard.dart';
 import 'friends.dart';
 import 'messages.dart';
-import '../Firebase/auth.dart';
 import '../Firebase/database.dart';
 import 'profile.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,6 +24,7 @@ class _FeedState extends State<Feed> {
   String? imageUrl;
   String postValue = '';
 
+  bool processed=false;
 
   List feedPost = [];
   List feedName = [];
@@ -186,8 +187,17 @@ class _FeedState extends State<Feed> {
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          await getImage(ImageSource.gallery);
+
+                          String? im = await getImage(ImageSource.gallery);
+                          setState((){
+                            imageUrl = im;
+                          });
+                          print("done");
+                          setState(() {
+                            processed = true;
+                          });
                         },
+
                         child: Row(
                           children: [
                             Icon(Icons.image),
@@ -197,8 +207,15 @@ class _FeedState extends State<Feed> {
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          await getImage(ImageSource.camera);
-                          print(ImageSource);
+
+                          String? im = await getImage(ImageSource.camera);
+                          setState((){
+                            imageUrl = im;
+                          });
+                          print("done");
+                          setState(() {
+                            processed = true;
+                          });
                         },
                         child: Row(
                           children: [
@@ -228,21 +245,31 @@ class _FeedState extends State<Feed> {
                             return;
                           }
 
-                          if (imageUrl != null) {
-                            String val = "${imageUrl!} $postValue";
-                            await _firestoreDatabase.addFeed(val, true);
-                          }
-                          else {
-                            await _firestoreDatabase.addFeed(postValue, false);
-                          }
+                          if(processed) {
+                            print(imageUrl);
+                            if (imageUrl != null) {
+                              String val = "${imageUrl!} $postValue";
+                              await _firestoreDatabase.addFeed(val, true);
+                            }
+                            else {
+                              await _firestoreDatabase.addFeed(
+                                  postValue, false);
+                            }
 
-                          print(imageUrl);
-                          Navigator.of(context).pop();
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) => const Feed()),
-                          );
+                            Navigator.of(context).pop();
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (
+                                      BuildContext context) => const Feed()),
+                            );
+                          }
+                          else{
+                            Future.delayed(Duration(milliseconds: 2000));
+                            setState(() {
+                              processed = true;
+                            });
+                          }
                         }),
                     ElevatedButton(
                       style: ButtonStyle(
