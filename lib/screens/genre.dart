@@ -177,7 +177,7 @@ class Song extends StatefulWidget {
 
 class _SongState extends State<Song>{
 
-  String token = "BQDaQ3QnqJrzE7TitDNvS6f5Fgw--1E9XnZjF5BFVvlilQhRRfjvhHqMhwi0PfTwzBdG3BsZlTE3ZQoNTKMbPMjxU5DCDzPbTgbIwPL4UyshbBxiOoA";
+  String token = "BQAl_jO-yyrJRBpnQw_e-YQaXETRKjgI-MigTPD9N1yIq9-xvzQiSLIyC-k06LKLsnaPlwYAPcn8W4Wj8UM6owJ8m8BLRjdaR695HbNb293aH1v_JJA";
 
   Future getData()async{
     String url = 'https://api.spotify.com/v1/recommendations?limit=2&seed_artists=4NHQUGzhtTLFvgF5SZesLK&seed_genres=$genreSelected&seed_tracks=0c6xIDDpzE81m2q797ordA';
