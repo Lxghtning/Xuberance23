@@ -14,9 +14,13 @@ class Friends extends StatefulWidget {
   State<Friends> createState() => _FriendsState();
 }
 
-class _FriendsState extends State<Friends> {
+class _FriendsState extends State<Friends> with SingleTickerProviderStateMixin {
   TextEditingController controller = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
+  AnimationController? _animationController;
+  Animation<double>? _fadeAnimation;
 
   List userList = [];
   List friendReqNameList = [];
@@ -33,6 +37,12 @@ class _FriendsState extends State<Friends> {
 
       });
     });
+    _animationController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_animationController!);
+    _animationController!.forward();
   }
 
   Future<void> load() async{
@@ -74,177 +84,185 @@ class _FriendsState extends State<Friends> {
           body:Container(
             color: Colors.blueGrey,
             alignment: Alignment.center,
-            child: TabBarView(
-                children:[
-                  //Tab 1 - Search for friends
-                  Column(
-                      children:[
-                        const SizedBox(height: 20),
-                        TextField(
-                          onChanged: (value){
-                            updateUsersList(value);
-                          },
-                          style: const TextStyle(
-                            color: Colors.black,
-                          ),
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.blueGrey[300],
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide.none,
-                            ),
-                            hintText: "Search friends",
-                            prefixIcon: const Icon(Icons.search),
-                            prefixIconColor: Colors.greenAccent,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: userDisplayList.length,
-                            itemBuilder: (context, index) {
-                              return Card(
-                                child: ListTile(
-                                  onTap: (){
-                                  },
-                                  title: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        userDisplayList[index],
-                                        style: const TextStyle(
-                                          backgroundColor: Colors.white,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      const Spacer(),
-                                      IconButton(
-                                          icon: const Icon(Icons.send),
-                                          onPressed: () {
-                                            _firestoreDatabase.friendRequestFunction(userList[index]);
-                                            Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                            builder: (BuildContext context) => const  Friends()),
-                                            );
-
-                                          }
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
+            child: FadeTransition(
+              opacity: _fadeAnimation!,
+              child: TabBarView(
+                  children:[
+                    //Tab 1 - Search for friends
+                    Column(
+                        children:[
+                          const SizedBox(height: 20),
+                          TextField(
+                            onChanged: (value){
+                              updateUsersList(value);
                             },
-                          ),
-                        ),]
-                  ),
-
-                  //Tab 2 - Friend Requests
-                  ListView.builder(
-                    itemCount: friendReqNameList.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        child: ListTile(
-                          onTap: (){},
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                friendReqNameList[index],
-                                style: const TextStyle(
-                                  backgroundColor: Colors.white,
-                                  color: Colors.black,
-                                ),
+                            style: const TextStyle(
+                              color: Colors.black,
+                            ),
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.blueGrey[300],
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide.none,
                               ),
-                              const Spacer(),
-                              IconButton(
-                                  icon: const Icon(Icons.add),
-                                  onPressed: () async {
-                                    bool ifCurrentUserIsFriends = await _firestoreDatabase
-                                        .checkForFriendCurrentUser(
-                                        friendReqNameList[index]);
-                                    if (!ifCurrentUserIsFriends) {
-                                      await _firestoreDatabase.addUserToFriendList(
-                                          friendReqNameList[index]);
-                                      await _firestoreDatabase
-                                          .addRequestedUserToCurrentUserFriendList(
-                                          friendReqNameList[index]);
-                                      await _firestoreDatabase.popFriendReqList(
-                                          friendReqNameList[index]);
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) => const Friends()),
-                                      );
-                                    }
-                                  }),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-
-                  //Tab 3 - View Friends
-                  Column(
-                      children: [
-                        const SizedBox(height: 20),
-                        TextField(
-                          onChanged: (value){
-                            updateFriendsNameList(value);
-                          },
-                          style: const TextStyle(
-                            color: Colors.black,
-                          ),
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.blueGrey[300],
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide.none,
+                              hintText: "Search friends",
+                              prefixIcon: const Icon(Icons.search),
+                              prefixIconColor: Colors.greenAccent,
                             ),
-                            hintText: "Search friends",
-                            prefixIcon: const Icon(Icons.search),
-                            prefixIconColor: Colors.greenAccent,
                           ),
-                        ),
-                        const SizedBox(height: 20),
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: friendsNameDisplayList.length,
-                            itemBuilder: (context, index) {
-                              return Card(
-                                child: ListTile(
-                                  onTap: (){},
-                                  title: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        friendsNameDisplayList[index],
-                                        style: const TextStyle(
-                                          backgroundColor: Colors.white,
-                                          color: Colors.black,
+                          const SizedBox(height: 20),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: userDisplayList.length,
+                              itemBuilder: (context, index) {
+                                return Card(
+                                  child: ListTile(
+                                    onTap: (){
+                                    },
+                                    title: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          userDisplayList[index],
+                                          style: const TextStyle(
+                                            backgroundColor: Colors.white,
+                                            color: Colors.black,
+                                          ),
                                         ),
-                                      ),
-                                      const Spacer(),
-                                      IconButton(
-                                          icon: const Icon(Icons.remove),
-                                          onPressed: () async{
-                                            await _firestoreDatabase.removeFriendCurrentUser(friendsNameDisplayList[index]);
-                                            await _firestoreDatabase.removeFriendFriend(friendsNameDisplayList[index]);
-                                          }
-                                      ),
-                                    ],
+                                        const Spacer(),
+                                        IconButton(
+                                            icon: const Icon(Icons.send),
+                                            onPressed: () {
+                                              _firestoreDatabase.friendRequestFunction(userList[index]);
+                                              Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                              builder: (BuildContext context) => const  Friends()),
+                                              );
+
+                                            }
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),]
+                    ),
+
+                    //Tab 2 - Friend Requests
+                    ListView.builder(
+                      itemCount: friendReqNameList.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          child: ListTile(
+                            onTap: (){},
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  friendReqNameList[index],
+                                  style: const TextStyle(
+                                    backgroundColor: Colors.white,
+                                    color: Colors.black,
                                   ),
                                 ),
-                              );
-                            },
+                                const Spacer(),
+                                IconButton(
+                                    icon: const Icon(Icons.add),
+                                    onPressed: () async {
+                                      bool ifCurrentUserIsFriends = await _firestoreDatabase
+                                          .checkForFriendCurrentUser(
+                                          friendReqNameList[index]);
+                                      if (!ifCurrentUserIsFriends) {
+                                        await _firestoreDatabase.addUserToFriendList(
+                                            friendReqNameList[index]);
+                                        await _firestoreDatabase
+                                            .addRequestedUserToCurrentUserFriendList(
+                                            friendReqNameList[index]);
+                                        await _firestoreDatabase.popFriendReqList(
+                                            friendReqNameList[index]);
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) => const Friends()),
+                                        );
+                                      }
+                                    }),
+                              ],
+                            ),
                           ),
-                        ),]
-                  ),
+                        );
+                      },
+                    ),
 
-                ]
+                    //Tab 3 - View Friends
+                    Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          TextField(
+                            onChanged: (value){
+                              updateFriendsNameList(value);
+                            },
+                            style: const TextStyle(
+                              color: Colors.black,
+                            ),
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.blueGrey[300],
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide.none,
+                              ),
+                              hintText: "Search friends",
+                              prefixIcon: const Icon(Icons.search),
+                              prefixIconColor: Colors.greenAccent,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: friendsNameDisplayList.length,
+                              itemBuilder: (context, index) {
+                                return Card(
+                                  child: ListTile(
+                                    onTap: (){},
+                                    title: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          friendsNameDisplayList[index],
+                                          style: const TextStyle(
+                                            backgroundColor: Colors.white,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        IconButton(
+                                            icon: const Icon(Icons.remove),
+                                            onPressed: () async{
+                                              await _firestoreDatabase.removeFriendCurrentUser(friendsNameDisplayList[index]);
+                                              await _firestoreDatabase.removeFriendFriend(friendsNameDisplayList[index]);
+                                              Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (BuildContext context) => const  Friends()),
+                                              );
+                                            }
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),]
+                    ),
+
+                  ]
+              ),
             ),
           ),
           bottomNavigationBar: BottomNavigationBar(

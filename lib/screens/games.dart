@@ -130,13 +130,13 @@ class Games extends StatelessWidget {
         onTap: () {
           print(label);
           if(label == 'Chess'){
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) => const Game()),
             );
           }else{
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) => const Snake()),

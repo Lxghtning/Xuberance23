@@ -578,5 +578,37 @@ class Database {
     return feedBoolean;
   }
 
+  Future<void> changeUsername(String username) async {
+    await _firestore.collection('users')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        if (doc['uid'] == _auth.currentUser?.uid) {
+          doc.reference.update({
+            'name': username,
+          });
+        }
+      }
+    });
+  }
+
+  Future<List> sendDetailsGenre(String genre) async {
+    List genreList = [];
+    await _firestore.collection('movies')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        if (doc['genre'] == genre) {
+          genreList.add(doc['description']);
+          genreList.add(doc['name']);
+          genreList.add(doc['lead']);
+          genreList.add(doc['director']);
+          genreList.add(doc['image']);
+        }
+      }
+    });
+    return genreList;
+  }
+
 
 }

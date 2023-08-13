@@ -126,18 +126,25 @@ class _FeedState extends State<Feed> {
                             style: const TextStyle(
                                 backgroundColor: Colors.white,
                                 color: Colors.black,
-                                fontSize: 12.0),
+                                fontSize: 19.0),
+                              textAlign: TextAlign.left,
                           ),
                           feedBool[index]?
                               Column(
                           children: [
-                            Image.network(feedPost[index].substring(0, feedPost[index].indexOf(' '))),
-                            Text(
-                              feedPost[index].substring(feedPost[index].indexOf(' ')+1, feedPost[index].length),
-                              style: const TextStyle(
-                                  backgroundColor: Colors.white,
-                                  color: Colors.black,
-                                  fontSize: 20.0),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 12.0),
+                              child: Image.network(feedPost[index].substring(0, feedPost[index].indexOf(' '))),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0,25,0,20),
+                              child: Text(
+                                feedPost[index].substring(feedPost[index].indexOf(' ')+1, feedPost[index].length),
+                                style: const TextStyle(
+                                    backgroundColor: Colors.white,
+                                    color: Colors.black,
+                                    fontSize: 20.0),
+                              ),
                             )
                               ]):Text(
                               feedPost[index],
@@ -190,7 +197,8 @@ class _FeedState extends State<Feed> {
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          await getImage(ImageSource.gallery);
+                          await getImage(ImageSource.camera);
+                          print(ImageSource);
                         },
                         child: Row(
                           children: [

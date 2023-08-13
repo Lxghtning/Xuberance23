@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:googleapis/compute/v1.dart';
 import '../Authentication/login.dart';
 import '../Firebase/auth.dart';
 import '../Firebase/database.dart';
@@ -76,6 +77,7 @@ class _ProfileState extends State<Profile> {
                 const Padding(
                   padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: CircleAvatar(
+                    backgroundImage: NetworkImage("https://pbs.twimg.com/profile_images/1176104612798951424/9Do9QXzf_400x400.png"),
                     backgroundColor: Colors.yellow,
                     radius: 50.0,
                   ),
@@ -106,7 +108,7 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 250, 0),
+                          padding: const EdgeInsets.fromLTRB(0, 0, 300, 0),
                           child: Text(
                             name,
                             style: const TextStyle(
@@ -126,7 +128,7 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 0, 100, 0),
+                          padding: const EdgeInsets.fromLTRB(10, 0, 50, 0),
                           child: Text(
                             email,
                             style: const TextStyle(

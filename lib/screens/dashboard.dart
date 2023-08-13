@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'games.dart';
 import 'genre.dart';
+import 'movies.dart';
 import 'song.dart';
 import 'searchVid.dart';
 import 'feed.dart';
@@ -56,7 +57,7 @@ class Dashboard extends StatelessWidget {
                   buildDashboardItem(Icons.tv, 'Videos', Colors.red, Colors.redAccent,context).animate().fade(duration: 1000.ms).scale(duration: 1000.ms),
                   buildDashboardItem(Icons.music_note, 'Music', Colors.blue, Colors.blueAccent,context).animate().fade(duration: 1000.ms).scale(duration: 1000.ms),
                   buildDashboardItem(Icons.games, 'Games', Colors.purple, Colors.purpleAccent,context).animate().fade(duration: 1000.ms).scale(duration: 1000.ms),
-                  buildDashboardItem(Icons.book, 'Where\'s my food?', Colors.orange, Colors.orangeAccent,context).animate().fade(duration: 1000.ms).scale(duration: 1000.ms),
+                  buildDashboardItem(Icons.book, 'Movies', Colors.orange, Colors.orangeAccent,context).animate().fade(duration: 1000.ms).scale(duration: 1000.ms),
 
                 ],
               ),
@@ -150,6 +151,13 @@ class Dashboard extends StatelessWidget {
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) => const Games()),
+            );
+          }
+          else if(label == 'Movies'){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => const  Movies()),
             );
           }
         },

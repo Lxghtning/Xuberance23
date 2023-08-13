@@ -44,6 +44,7 @@ class _SignUpPageState extends State<SignUp> with SingleTickerProviderStateMixin
   bool passState = true;
 
   final AuthService _auth = AuthService();
+
   final Database _firestoreDatabase = Database();
 
   String error = "";
@@ -206,8 +207,7 @@ class _SignUpPageState extends State<SignUp> with SingleTickerProviderStateMixin
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: () async {
-                  bool state = await _firestoreDatabase
-                      .checkForUserRegister(email);
+                  bool state = await _firestoreDatabase.checkForUserRegister(email);
 
                   if (!state) {
                     setState(() {
