@@ -36,7 +36,7 @@ class _LoadingState extends State<Loading>{
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
-        color: Colors.lightBlue,
+        color: Colors.blueGrey,
         child: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

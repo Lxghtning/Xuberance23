@@ -159,6 +159,7 @@ class _LoginPageState extends State<Login> with SingleTickerProviderStateMixin {
                     },
                   ),
                 ),
+                Text(error, style: const TextStyle(color: Colors.red),),
                 const SizedBox(height: 32),
                 ElevatedButton(
                   onPressed: () async {

@@ -204,6 +204,7 @@ class _SignUpPageState extends State<SignUp> with SingleTickerProviderStateMixin
                   )
                 ),
               ),
+              Text(error, style: const TextStyle(color: Colors.red),),
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: () async {
