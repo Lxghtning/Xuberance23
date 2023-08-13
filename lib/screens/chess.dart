@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chess_board/flutter_chess_board.dart';
 
+import 'dashboard.dart';
 import 'games.dart';
 
 class Game extends StatefulWidget {
@@ -14,17 +15,74 @@ class _GameState extends State<Game> {
   ChessBoardController controller = ChessBoardController();
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     controller.addListener(() {
       if(controller.isCheckMate()) {
         print("CHECKMATE");
-      } else if(controller.isDraw()) {
-        print("DRAW");
-      } else if(controller.isStaleMate()) {
-        print("STALEMATE  ");
+        _showCheckmateDialog();
+      }  else if(controller.isStaleMate()) {
+        _showStalemateDialog();
       }
     });
+  }
+
+  void _showCheckmateDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("CHECKMATE"),
+          content: Text("The game is over!"),
+          actions: <Widget>[
+            ElevatedButton(onPressed: (){
+              controller.resetBoard();
+              Navigator.of(context).pop();
+            }, child: Text("Play again?")),
+            ElevatedButton(
+              child: Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => Dashboard()),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showStalemateDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Draw By Stalemate"),
+          content: Text("The game is over!"),
+          actions: <Widget>[
+            ElevatedButton(onPressed: (){
+              controller.resetBoard();
+              Navigator.of(context).pop();
+            }, child: Text("Play again?")),
+            ElevatedButton(
+              child: Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => Dashboard()),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

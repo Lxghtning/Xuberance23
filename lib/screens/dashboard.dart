@@ -56,7 +56,7 @@ class Dashboard extends StatelessWidget {
                   buildDashboardItem(Icons.tv, 'Videos', Colors.red, Colors.redAccent,context).animate().fade(duration: 1000.ms).scale(duration: 1000.ms),
                   buildDashboardItem(Icons.music_note, 'Music', Colors.blue, Colors.blueAccent,context).animate().fade(duration: 1000.ms).scale(duration: 1000.ms),
                   buildDashboardItem(Icons.games, 'Games', Colors.purple, Colors.purpleAccent,context).animate().fade(duration: 1000.ms).scale(duration: 1000.ms),
-                  buildDashboardItem(Icons.book, 'Movies', Colors.orange, Colors.orangeAccent,context).animate().fade(duration: 1000.ms).scale(duration: 1000.ms),
+                  // buildDashboardItem(Icons.book, 'Movies', Colors.orange, Colors.orangeAccent,context).animate().fade(duration: 1000.ms).scale(duration: 1000.ms),
 
                 ],
               ),
@@ -152,13 +152,13 @@ class Dashboard extends StatelessWidget {
                   builder: (BuildContext context) => const Games()),
             );
           }
-          else if(label == 'Movies'){
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => const  Movies()),
-            );
-          }
+          // else if(label == 'Movies'){
+          //   Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (BuildContext context) => const  Movies()),
+          //   );
+          // }
         },
         child: Container(
           decoration: BoxDecoration(

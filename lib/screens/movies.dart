@@ -14,7 +14,7 @@ class Movies extends StatefulWidget {
 
 class _MoviesState extends State<Movies> {
 
-  String searchQuery = "pop";
+  String searchQuery = "thriller";
 
   final Database _firestoreDatabase = Database();
 
@@ -30,7 +30,9 @@ class _MoviesState extends State<Movies> {
 
 
   Future<void> load() async {
+    print(genreList);
     genreList = await _firestoreDatabase.sendDetailsGenre(searchQuery);
+
   }
 
   @override
@@ -74,20 +76,37 @@ class _MoviesState extends State<Movies> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    for(int i = 1; i<=5; i++)
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                        child: SizedBox(
-                          height: 200,
-                            width: 400,
-                            child: Image.network(
-                                "https://static.toiimg.com/thumb/msid-102096238,width-1280,resizemode-4/102096238.jpg",
-                              fit: BoxFit.cover,
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: genreList.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            child: ListTile(
+                              onTap: (){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const Inbox()),
+                                );
+                              },
+                              title: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    genreList[index],
+                                    style: const TextStyle(
+                                      backgroundColor: Colors.white,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                ],
+                              ),
                             ),
-                        )
-                      )
-                    ],
-                ),
+                          );
+                        },
+                      ),
+                    ),
+        ]),
               ),
               const SizedBox(height: 20),
               Text("Suggestions for: $searchQuery", style: const TextStyle(fontSize: 20, color: Colors.white),),
@@ -95,14 +114,14 @@ class _MoviesState extends State<Movies> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    for(int i = 1; i<5; i++)
+                    for(int i = 0; i<4; i++)
                       Padding(
                           padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                           child: SizedBox(
                             height: 300,
                             width: 200,
                             child: Image.network(
-                              "https://static.toiimg.com/thumb/msid-102096238,width-1280,resizemode-4/102096238.jpg",
+                              genreList[i],
                               fit: BoxFit.cover,
                             ),
                           )

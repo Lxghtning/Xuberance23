@@ -594,15 +594,12 @@ class Database {
 
   Future<List> sendDetailsGenre(String genre) async {
     List genreList = [];
+    print(genre);
     await _firestore.collection('movies')
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
         if (doc['genre'] == genre) {
-          genreList.add(doc['description']);
-          genreList.add(doc['name']);
-          genreList.add(doc['lead']);
-          genreList.add(doc['director']);
           genreList.add(doc['image']);
         }
       }
