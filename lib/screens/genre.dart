@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hackathonxcodexuberance/screens/search.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dashboard.dart';
 import 'feed.dart';
 import 'friends.dart';
 import 'messages.dart';
@@ -143,6 +144,12 @@ class _GenreState extends State<Genre> {
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) => const Feed()),
+            );
+          }else if (index == 3){
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => const Dashboard()),
             );
           }else if(index == 4){
             Navigator.pushReplacement(

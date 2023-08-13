@@ -3,7 +3,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'games.dart';
 import 'genre.dart';
 import 'movies.dart';
-import 'song.dart';
 import 'searchVid.dart';
 import 'feed.dart';
 import 'friends.dart';
@@ -43,7 +42,7 @@ class Dashboard extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(50, 150, 50,0),
             child: const Text(
             "Hey there! Whats on your mind today?",
-            style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
         ).animate().fadeIn(duration: 1200.ms),
           ),
 
