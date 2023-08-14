@@ -21,7 +21,7 @@ class _SearchState extends State<SearchSong> {
     super.initState();
     _initializeYouTubeApi();
     Future.delayed(const  Duration(seconds: 2), () {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Video(videoId: videoID)));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Video(videoId: videoID)));
     });
   }
 

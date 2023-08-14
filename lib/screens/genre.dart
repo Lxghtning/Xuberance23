@@ -332,7 +332,7 @@ class _SongState extends State<Song>{
             label: 'Profile',
           ),
         ],
-        currentIndex: 2,
+        currentIndex: 3,
         selectedItemColor: Colors.amber,
         type: BottomNavigationBarType.fixed,
         onTap: (int index) {
