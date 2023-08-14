@@ -272,7 +272,6 @@ class _InboxState extends State<Inbox> {
 
   Future<void> load() async{
     messages = await _firestoreDatabase.messagesListSend(nameOfUserSelected);
-    print(messages);
     messagesBoolean = await _firestoreDatabase.sendMessagesBooleanList();
   }
 

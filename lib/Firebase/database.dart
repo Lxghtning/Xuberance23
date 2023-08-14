@@ -108,6 +108,11 @@ class Database {
   Future removeFriendFriend(String name) async {
     String nameOfFriend = await friendName(_auth.currentUser!.uid);
     String id = await friendID(name);
+
+    List userFeed = await userFeedSend(id);
+    List userFeedID = await userFeedIDSend(id);
+    List userBooleanFeed = await userFeedBooleanSend(id);
+
     await _firestore.collection('users')
         .get()
         .then((QuerySnapshot querySnapshot) {
@@ -118,11 +123,22 @@ class Database {
           bool containsUser = friendsIDList.any((element) =>
           element == _auth.currentUser?.uid);
           if (containsUser) {
+            for(int i = 0; i<userFeedID.length; i++){
+              if(userFeedID[i] == _auth.currentUser!.uid){
+                userFeed.removeAt(i);
+                userBooleanFeed.removeAt(i);
+                userFeedID.removeAt(i);
+              }
+            }
             friendsNameList.remove(nameOfFriend);
             friendsIDList.remove(_auth.currentUser?.uid);
+
             doc.reference.update({
               'friendsIDList': friendsIDList,
               'friendsNameList': friendsNameList,
+              'feed': userFeed,
+              'feedID': userFeedID,
+              'feedBoolean': userBooleanFeed,
             });
           }
         }
@@ -132,6 +148,10 @@ class Database {
 
   Future removeFriendCurrentUser(String name) async {
     String id = await friendID(name);
+    List currentUserFeed = await userFeedSend(_auth.currentUser!.uid);
+    List currentUserFeedID = await userFeedIDSend(_auth.currentUser!.uid);
+    List userBooleanFeed = await userFeedBooleanSend(_auth.currentUser!.uid);
+
     await _firestore.collection('users')
         .get()
         .then((QuerySnapshot querySnapshot) {
@@ -144,9 +164,19 @@ class Database {
           if (containsUser) {
             friendsNameList.remove(name);
             friendsIDList.remove(id);
+            for(int i = 0; i<currentUserFeedID.length; i++){
+              if(currentUserFeedID[i] == id){
+                userBooleanFeed.removeAt(i);
+                currentUserFeed.removeAt(i);
+                currentUserFeedID.removeAt(i);
+              }
+            }
             doc.reference.update({
               'friendsIDList': friendsIDList,
               'friendsNameList': friendsNameList,
+              'feed': currentUserFeed,
+              'feedID': currentUserFeedID,
+              'feedBoolean': userBooleanFeed,
             });
           }
         }
@@ -158,6 +188,13 @@ class Database {
   Future addRequestedUserToCurrentUserFriendList(nameOfFriend) async {
     List friendsIDList = [];
     List friendsNameList = [];
+    List userFeed = [];
+    List userFeedID = [];
+    List userBooleanFeed = [];
+    List currentUserFeed = await userFeedSend(_auth.currentUser!.uid);
+    List currentUserFeedID = await userFeedIDSend(_auth.currentUser!.uid);
+    List currentUserBooleanFeed = await userFeedBooleanSend(_auth.currentUser!.uid);
+
     String nameCurrentUser = await friendName(_auth.currentUser!.uid);
     String idOfFriend = await friendID(nameOfFriend);
 
@@ -168,14 +205,27 @@ class Database {
         if (doc['uid'] == idOfFriend) {
           friendsIDList = doc['friendsIDList'];
           friendsNameList = doc['friendsNameList'];
+          userFeed = doc['feed'];
+          userFeedID = doc['feedID'];
+
           bool containsFriend = friendsIDList.any((element) =>
           element == _auth.currentUser?.uid);
           if (!containsFriend) {
+            for(int i = 0; i<currentUserFeedID.length; i++){
+              if(currentUserFeedID[i] == _auth.currentUser?.uid){
+                userFeed.insert(0, currentUserFeed[i]);
+                userFeedID.insert(0, currentUserFeedID[i]);
+                userBooleanFeed.insert(0, currentUserBooleanFeed[i]);
+              }
+            }
             friendsIDList.insert(0, _auth.currentUser?.uid);
             friendsNameList.insert(0, nameCurrentUser);
             doc.reference.update({
               'friendsIDList': friendsIDList,
               'friendsNameList': friendsNameList,
+              'feed': userFeed,
+              'feedID': userFeedID,
+              'feedBoolean': userBooleanFeed,
             });
           }
         }
@@ -184,10 +234,16 @@ class Database {
   }
 
   Future addUserToFriendList(String nameOfFriend) async {
-    List friendList = [];
-    List friendNameList = [];
     String id = await friendID(nameOfFriend);
 
+    List friendList = [];
+    List friendNameList = [];
+    List userFeed = await userFeedSend(id);
+    List userFeedID = await userFeedIDSend(id);
+    List userBooleanFeed = await userFeedBooleanSend(id);
+    List currentUserBooleanFeed = [];
+    List currentUserFeed = [];
+    List currentUserFeedID = [];
     await _firestore.collection('users')
         .get()
         .then((QuerySnapshot querySnapshot) {
@@ -195,13 +251,25 @@ class Database {
         if (doc['uid'] == _auth.currentUser?.uid) {
           friendList = doc['friendsIDList'];
           friendNameList = doc['friendsNameList'];
+          userFeed = doc['feed'];
+          userFeedID = doc['feedID'];
           bool containsFriend = friendList.any((element) => element == id);
           if (!containsFriend) {
+            for(int i = 0; i<userFeedID.length; i++){
+              if(userFeedID[i] == id){
+                currentUserFeed.insert(0, userFeed[i]);
+                currentUserFeedID.insert(0, userFeedID[i]);
+                currentUserBooleanFeed.insert(0, userBooleanFeed[i]);
+              }
+            }
             friendList.insert(0, id);
             friendNameList.insert(0, nameOfFriend);
             doc.reference.update({
               'friendsIDList': friendList,
               'friendsNameList': friendNameList,
+              'feed': currentUserFeed,
+              'feedID': currentUserFeedID,
+              'feedBoolean': currentUserBooleanFeed,
             });
           }
         }
@@ -211,9 +279,11 @@ class Database {
 
 
   Future popFriendReqList(String nameOfFriend) async {
+    String id = await friendID(nameOfFriend);
     List friendIDList = [];
     List friendNameList = [];
-    String id = await friendID(nameOfFriend);
+
+    String nameCurrentUser = await friendName(_auth.currentUser!.uid);
     await _firestore.collection('users')
         .get()
         .then((QuerySnapshot querySnapshot) {
@@ -223,6 +293,7 @@ class Database {
           friendNameList = doc['friendRequestsNameList'];
           friendIDList.remove(id);
           friendNameList.remove(nameOfFriend);
+
           doc.reference.update({
             'friendRequestsIDList': friendIDList,
             'friendRequestsNameList': friendNameList,
@@ -390,30 +461,37 @@ class Database {
       }
     });
   }
-
-  Future messagesListSend(name) async {
+  Future<List> messagesListSend(String nameUser) async {
     List messagesSent = [];
     List messagesTo = [];
+    print(nameUser);
 
-    await _firestore.collection('users')
-        .get()
-        .then((QuerySnapshot querySnapshot) {
+    await _firestore.collection('users').get().then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
         if (doc['uid'] == _auth.currentUser?.uid) {
-          messagesSent = doc['messages'];
-          messagesTo = doc['messagesTo'];
-          for(int i = 0; i<messagesTo.length; i++){
-            if(messagesTo[i] != name){
-              messagesTo.remove(messagesTo[i]);
-            }
-          }
+          messagesSent = List.from(doc['messages']); // Create a copy of the list
+          messagesTo = List.from(doc['messagesTo']); // Create a copy of the list
         }
       }
     });
 
-    return messagesSent;
-  }
+    print(messagesTo);
 
+    List filteredMessagesSent = [];
+    List filteredMessagesTo = [];
+
+    for (int i = 0; i < messagesTo.length; i++) {
+      if (messagesTo[i] == nameUser) {
+        filteredMessagesSent.add(messagesSent[i]);
+        filteredMessagesTo.add(messagesTo[i]);
+      }
+    }
+
+    print("________________");
+    print(filteredMessagesSent);
+
+    return filteredMessagesSent;
+  }
 
 
   Future sendCurrentUserDetails() async {
@@ -605,6 +683,49 @@ class Database {
       }
     });
     return genreList;
+  }
+
+  Future<List> userFeedSend(String uid) async {
+    List feedList = [];
+    await _firestore.collection('users')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        if (doc['uid'] == uid) {
+          feedList = doc['feed'];
+        }
+      }
+    });
+    return feedList;
+  }
+
+
+  Future<List> userFeedIDSend(String uid) async {
+    List feedList = [];
+    await _firestore.collection('users')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        if (doc['uid'] == uid) {
+          feedList = doc['feedID'];
+        }
+      }
+    });
+    return feedList;
+  }
+
+  Future<List> userFeedBooleanSend(String uid) async {
+    List feedList = [];
+    await _firestore.collection('users')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        if (doc['uid'] == uid) {
+          feedList = doc['feedBoolean'];
+        }
+      }
+    });
+    return feedList;
   }
 
 
