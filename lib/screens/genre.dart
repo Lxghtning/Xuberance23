@@ -177,7 +177,35 @@ class Song extends StatefulWidget {
 
 class _SongState extends State<Song>{
 
-  String token = "BQDBI-sX0J6Cgjk86dhk_VfJ29i_6lleB15t-glKcwIFXcCMSL0i450qOkjzqJtK7xURFP-RegTRciOT_VgDKjXhQviR_0fsKloC2VSTxSkQSrA3a9o";
+  late String? token = '';
+  String tokenUrl = 'https://accounts.spotify.com/api/token';
+  String clientId = '7919ef1fe09f45bbbc55f1496a6e7047';
+  String clientSecret = 'd6b6f0c00ad6480799be379e6752fd83';
+
+  @override
+  void initState() {
+    super.initState();
+    _getToken();
+  }
+
+  Future<void> _getToken() async{
+    final response = await http.post(
+      Uri.parse(tokenUrl),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: {
+        'grant_type' : 'client_credentials',
+        'client_id': clientId,
+        'client_secret': clientSecret,
+      }
+    );
+
+    final data = json.decode(response.body);
+    setState((){
+      token = data['access_token'];
+    });
+  }
 
   Future getData()async{
     String url = 'https://api.spotify.com/v1/recommendations?limit=2&seed_artists=4NHQUGzhtTLFvgF5SZesLK&seed_genres=$genreSelected&seed_tracks=0c6xIDDpzE81m2q797ordA';
@@ -215,8 +243,6 @@ class _SongState extends State<Song>{
             } else if (!snapshot.hasData) {
               return const Text('No data available');
             } else {
-              // Data has been successfully fetched and is available in snapshot.data
-              // You can now access and use the JSON data here
               Map<String, dynamic> jsonData = snapshot.data;
               // Now you can access the data in the jsonData map
               print(jsonData);
@@ -225,7 +251,6 @@ class _SongState extends State<Song>{
               var imageURL = jsonData['tracks'][0]['album']['images'][0]['url'];
               var type = jsonData['tracks'][0]['album']['album_type'];
               var releaseDate = jsonData['tracks'][0]['album']['release_date'];
-              var id = jsonData['tracks'][0]['album']['id'];
               String song = lpName;
 
               if (type != 'single'){
@@ -235,15 +260,10 @@ class _SongState extends State<Song>{
                 });
               }
 
-
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   //Suggestion text
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
-                    child: Text('Artist suggestion for: $genreSelected genre', style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-                  ),
 
                   const SizedBox(height: 30), // Gives some spacing between the text and the image
 
