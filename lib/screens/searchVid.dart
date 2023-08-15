@@ -28,7 +28,7 @@ class _SearchVidState extends State<SearchVid> {
 
   void _initializeYouTubeApi() async {
     final credentials = auth.clientViaApiKey(
-        'AIzaSyCdD9BXlW7v95tEpxnvyeVJwrCD4tvSryk' // Replace with your API Key
+        'Enter API-Key Here' // Replace with your API Key
     );
     _youtubeApi = yt.YouTubeApi(credentials);
   }
