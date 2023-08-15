@@ -179,8 +179,8 @@ class _SongState extends State<Song>{
 
   late String? token = '';
   String tokenUrl = 'https://accounts.spotify.com/api/token';
-  String clientId = '7919ef1fe09f45bbbc55f1496a6e7047';
-  String clientSecret = 'd6b6f0c00ad6480799be379e6752fd83';
+  String clientId = 'Enter Client ID Here';
+  String clientSecret = 'Enter Client Secret Here';
 
   @override
   void initState() {
